@@ -13,34 +13,33 @@ public class Graphic extends JPanel
         Graphics2D g2d = (Graphics2D) g;
         double width = this.getWidth()/52.0;
         double height = this.getHeight()/5;
-        int leftover = this.getWidth() - (int)width*52;
         int blacks = 0;
-        ArrayList<Double> whightx = new ArrayList<Double>();
-        ArrayList<Double> blackx = new ArrayList<Double>();
+        //ArrayList<Double> whightx = new ArrayList<Double>();
+        //ArrayList<Double> blackx = new ArrayList<Double>();
         g2d.setColor(Color.WHITE);
-        for(int i = 21; i <= 108; i++)
-        {
-            if(i%12 == 1 || i%12 == 3 || i%12 == 6 || i%12 == 8 || i%12 == 10)
-            {
-                blacks++;
-                blackx.add((i-blacks-21)*width + 2/52.0 + leftover/52 + width*.75);                
-            }
-            else
-            {                
-                whightx.add((i-blacks-21)*width);
-                g2d.fillRect((int)Math.round((i-blacks-21)*width), (int)(this.getHeight()-height), (int)(width), (int)height);
-            }
-            //System.out.println((int)Math.round((i-blacks-21)*width + 1/52.0 + leftover/52) + " " + ((i-blacks-21)*width + 1/52.0 + leftover/52));
+        for(int i = 0; i <= Piano.NATURAL; i++)
+        {               
+            g2d.fillRect((int)Math.round((i)*width), (int)(this.getHeight()-height), (int)(width), (int)height);
         }
-        //System.out.println(this.getWidth() + " " + (this.getWidth()/52.0));
 
         g2d.setColor(Color.BLACK);
         g2d.setStroke(new BasicStroke(2));
-        for(int i = 0; i < whightx.size(); i++)
+        for(int i = 0; i < Piano.NATURAL; i++)
         {
-            if(i < blackx.size())
-                g2d.fillRect((int)Math.round(blackx.get(i)), (int)(this.getHeight()-height), (int)(width/2), (int)(height*.7));
-            g2d.drawLine((int)Math.round(whightx.get(i)), (int)(this.getHeight()-height+1), (int)Math.round(whightx.get(i)), this.getHeight());
+            if(i < Piano.SHARP_FLAT)
+            {
+                double multiplier = .75;
+                if(Piano.BLACKKEYS[i]%12 == 1 || Piano.BLACKKEYS[i]%12 == 6)
+                {
+                    multiplier = .65;
+                }
+                else if(Piano.BLACKKEYS[i]%12 == 3 || Piano.BLACKKEYS[i]%12 == 10)
+                {
+                    multiplier = .85;
+                }
+                g2d.fillRect( (int)Math.round( (Piano.BLACKKEYS[i]-Piano.LOW-1-i )*width + width*multiplier), (int)(this.getHeight()-height), (int)(width/2), (int)(height*.7));
+            }
+            g2d.drawLine((int)Math.round((i)*width), (int)(this.getHeight()-height+1), (int)Math.round((i)*width), this.getHeight());
         }
         
         

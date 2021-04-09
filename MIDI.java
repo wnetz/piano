@@ -8,6 +8,7 @@ public class MIDI
 	public static void main(String args[]) throws MidiUnavailableException, InvalidMidiDataException, IOException
 	{
 		Frame frame = new Frame();
+		Piano piano = new Piano();
 
 
 		MidiDevice inputDevice;
@@ -42,15 +43,17 @@ public class MIDI
 		// Bind the transmitter to the receiver so the receiver gets input from the transmitter
 		transmitter.setReceiver(receiver);
 		// Create a new sequence
-		seq = new Sequence(Sequence.PPQ, 24);
+		seq = new Sequence(Sequence.PPQ, 60);
 		// And of course a track to record the input on
 		currentTrack = seq.createTrack();
 		// Do some sequencer settings
 		sequencer.setSequence(seq);
+		sequencer.setTempoInBPM(60);
 		sequencer.setTickPosition(0);
 		sequencer.recordEnable(currentTrack, -1);
 		// And start recording
 		sequencer.startRecording();
+		long time =  System.currentTimeMillis();
 		
 		
 		
@@ -58,6 +61,7 @@ public class MIDI
 		// Stop recording
 		scan.nextLine();
 		int count = 0;
+		long diff = (System.currentTimeMillis()-time)/100;
 		while(count < 10)
 		{
 			for(int j = 0; j < currentTrack.size()-1;j+=0)
@@ -66,16 +70,20 @@ public class MIDI
 				
 				byte[] n = currentTrack.get(j).getMessage().getMessage();
 				//System.out.println(Arrays.toString(n));
+				System.out.print((n[0]& 0xff) + " " + (n[1]& 0xff) + " " + dictionary.getVolume((n[2]& 0xff)) + " " + (n[2]& 0xff)); 
+					
+				System.out.println("| " + currentTrack.get(j).getTick() + " " + ((System.currentTimeMillis() - 1000*(currentTrack.get(j).getTick()/120.0))- time));
 				if((n[0]& 0xff) == 144)
 				{
-					System.out.print((n[0]& 0xff) + " " + (n[1]& 0xff) + " " + dictionary.getVolume((n[2]& 0xff)) + " " + (n[2]& 0xff)); 
-					
-					System.out.println("| " + currentTrack.get(j).getTick());
-
 					count++;
 				}
 				currentTrack.remove(currentTrack.get(j));
 			}
+			/*if(diff < (System.currentTimeMillis()-time)/100)
+			{
+				System.out.println((System.currentTimeMillis()-time)/100);
+				diff = (System.currentTimeMillis()-time)/100;
+			}*/
 		}
 	    // Tell sequencer to stop recording
 	    sequencer.stopRecording();

@@ -6,7 +6,7 @@ public class Frame extends JFrame
 
     public Frame()
     {
-        this.setSize(420,420);
+        this.setSize(1500,900);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.add(graphic);
         this.setVisible(true);
