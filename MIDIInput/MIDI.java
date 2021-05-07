@@ -2,6 +2,7 @@ package MIDIInput;
 
 import javax.sound.midi.*;
 
+import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 
@@ -18,15 +19,18 @@ public class MIDI implements Runnable {
 	Dictionarys dictionary;
 	int device;
 	ArrayList<Note> notes;
+	ArrayList<Note> returnNotes;
 
 	private boolean stopRequested = false;
 	private boolean get = false;
+	private boolean run = false;
 
 	public MIDI() {
 		dictionary = new Dictionarys();
 		device = 5;
 
 		notes = new ArrayList<Note>();
+		returnNotes = new ArrayList<Note>();
 
 		// all MIDI devices
 		for (int i = 0; i < MidiSystem.getMidiDeviceInfo().length; i++) {
@@ -76,10 +80,25 @@ public class MIDI implements Runnable {
 	}
 
 	public ArrayList<Note> getNotes() {
-		ArrayList<Note> nts = new ArrayList<Note>();
-		notes.forEach((n) -> nts.add(n));
-		notes.clear();
-		return nts;
+		get = true;	
+		int i = 0;
+		while(get)
+		{
+			try
+			{
+				Thread.sleep(1);
+			}
+			catch(IllegalArgumentException e)
+			{
+				System.out.println(e.getMessage());
+			}
+			catch(InterruptedException e)
+			{
+				System.out.println(e.getMessage());
+			}
+			
+		}	
+		return returnNotes;		
 	}
 
 	@Override
@@ -87,7 +106,15 @@ public class MIDI implements Runnable {
 		long time = System.currentTimeMillis();
 		// currentTrack.remove(currentTrack.get(0));
 		// Stop recording
-		while (!isStopRequested()) {
+		while (!isStopRequested()) {			
+			if(get)
+			{	
+				returnNotes.clear();
+				notes.forEach((n)-> returnNotes.add(n));
+				notes.clear();				
+				get = false;			
+			}
+			run = true;
 			// cycle through all unread notes
 			for (int j = 0; j < currentTrack.size() - 1; j += 0) {
 				// System.out.println(currentTrack.get(j).getMessage().getStatus());
@@ -99,6 +126,7 @@ public class MIDI implements Runnable {
 				note.volume = (n[2] & 0xff);
 				note.time = (currentTrack.get(j).getTick());
 				notes.add(note);
+				System.out.println(note);
 				// System.out.print(note);
 				// System.out.println("| " + currentTrack.get(j).getTick() + " Diff" +
 				// ((System.currentTimeMillis() - 1000*(currentTrack.get(j).getTick()/120.0))-
@@ -108,7 +136,8 @@ public class MIDI implements Runnable {
 				// revove note so we dont read it more than once
 				currentTrack.remove(currentTrack.get(j));
 			}
-			System.out.println(notes);
+			//if(notes.size()>0)
+				//System.out.println("get " + notes + " " + System.currentTimeMillis());			
 		}
 		// Tell sequencer to stop recording
 		sequencer.stopRecording();

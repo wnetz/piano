@@ -15,11 +15,12 @@ public class PianoProject {
         Scanner scan = new Scanner(System.in);
         MIDI midi = new MIDI();
         Thread midiThread = new Thread(midi);
+        midiThread.setDaemon(true);
         ArrayList<Integer[]> pressed = new ArrayList<Integer[]>();
         midiThread.start();
         while (true) {
 
-            /*ArrayList<Note> notes = midi.getNotes();
+            ArrayList<Note> notes = midi.getNotes();
             
             notes.forEach((n) -> 
             {
@@ -31,7 +32,7 @@ public class PianoProject {
                 frame.repaint();
             }
             piano.pressed(pressed);
-            pressed.clear();*/
+            pressed.clear();
 
         }
         //midi.requestStop();
