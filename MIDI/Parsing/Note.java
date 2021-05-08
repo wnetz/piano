@@ -1,4 +1,4 @@
-package MIDI;
+package MIDI.Parsing;
 
 public class Note {
     private int note, volume, onOff;

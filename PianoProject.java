@@ -5,8 +5,8 @@ import java.util.Scanner;
 import Graphics.Frame;
 import Graphics.Piano.Piano;
 import MIDI.MIDI;
-import MIDI.Note;
-import MIDI.MusicFiles.Parser;
+import MIDI.Parsing.Note;
+import MIDI.Parsing.Parser;
 
 public class PianoProject {
     public static void main(String args[]) { 

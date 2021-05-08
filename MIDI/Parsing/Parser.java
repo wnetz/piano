@@ -1,15 +1,9 @@
-package MIDI.MusicFiles;
+package MIDI.Parsing;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import MIDI.Chord;
-import MIDI.Measure;
-import MIDI.Note;
-import MIDI.Song;
-import MIDI.Voice;
 
 public class Parser {
     private Song song;

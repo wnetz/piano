@@ -2,6 +2,8 @@ package MIDI;
 
 import javax.sound.midi.*;
 
+import MIDI.Parsing.Note;
+
 import java.io.File;
 import java.io.IOException;
 

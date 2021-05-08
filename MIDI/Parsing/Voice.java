@@ -1,4 +1,4 @@
-package MIDI;
+package MIDI.Parsing;
 
 import java.util.ArrayList;
 
