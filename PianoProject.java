@@ -21,7 +21,7 @@ public class PianoProject {
         ArrayList<Integer[]> pressed = new ArrayList<Integer[]>();
         midiThread.start();
         
-        //parser.parse(scan.nextLine());
+        parser.parse(scan.nextLine());
 
         while (true) {
 

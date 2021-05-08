@@ -4,14 +4,22 @@ import java.util.ArrayList;
 
 public class Chord {
     private ArrayList<Note> notes;
-    private boolean dot;
+    private int dot;
     private double duration;
 
-    public Chord(boolean dot, double duration)
+    public Chord()
     {
         notes = new ArrayList<Note>();
-        this.dot = dot;
-        this.duration = duration;
+        this.dot = 0;
+        this.duration = 0;
+    }
+    public void setDot(int d) 
+    {
+        dot = d;
+    }
+    public void setDuration(double d) 
+    {
+        duration = d;
     }
     public void addNote(Note note)
     {
@@ -21,7 +29,7 @@ public class Chord {
     {
         return notes;
     }
-    public boolean getDot()
+    public int getDot()
     {
         return dot;
     }
