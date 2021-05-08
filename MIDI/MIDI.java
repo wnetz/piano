@@ -1,8 +1,7 @@
-package MIDIInput;
+package MIDI;
 
 import javax.sound.midi.*;
 
-import java.io.Console;
 import java.io.File;
 import java.io.IOException;
 
@@ -23,7 +22,6 @@ public class MIDI implements Runnable {
 
 	private boolean stopRequested = false;
 	private boolean get = false;
-	private boolean run = false;
 
 	public MIDI() {
 		dictionary = new Dictionarys();
@@ -80,8 +78,7 @@ public class MIDI implements Runnable {
 	}
 
 	public ArrayList<Note> getNotes() {
-		get = true;	
-		int i = 0;
+		get = true;
 		while(get)
 		{
 			try
@@ -103,7 +100,7 @@ public class MIDI implements Runnable {
 
 	@Override
 	public void run() {
-		long time = System.currentTimeMillis();
+		//long time = System.currentTimeMillis();
 		// currentTrack.remove(currentTrack.get(0));
 		// Stop recording
 		while (!isStopRequested()) {			
@@ -114,17 +111,12 @@ public class MIDI implements Runnable {
 				notes.clear();				
 				get = false;			
 			}
-			run = true;
 			// cycle through all unread notes
 			for (int j = 0; j < currentTrack.size() - 1; j += 0) {
 				// System.out.println(currentTrack.get(j).getMessage().getStatus());
 
 				byte[] n = currentTrack.get(j).getMessage().getMessage();
-				Note note = new Note();
-				note.onOff = (n[0] & 0xff);
-				note.note = (n[1] & 0xff);
-				note.volume = (n[2] & 0xff);
-				note.time = (currentTrack.get(j).getTick());
+				Note note = new Note((n[1] & 0xff),(n[2] & 0xff),(currentTrack.get(j).getTick()),(n[0] & 0xff));
 				notes.add(note);
 				System.out.println(note);
 				// System.out.print(note);

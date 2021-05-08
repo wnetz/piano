@@ -37,9 +37,7 @@ public class BlackKey extends Key
     public Color pressed(boolean pressed) {
         if (pressed) {
             this.color = this.secondaryColor;
-            System.out.println(this.secondaryColor);
         } else {
-            System.out.println(this.priamryColor);
             this.color = this.priamryColor;
         }
         return this.color;

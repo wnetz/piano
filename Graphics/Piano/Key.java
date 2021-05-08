@@ -32,7 +32,6 @@ public class Key {
         } else {
             this.color = priamryColor;
         }
-        System.out.println(this.color);
         return this.color;
     }
 

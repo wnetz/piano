@@ -1,4 +1,4 @@
-package MIDIInput;
+package MIDI;
 
 import java.util.*;
 
