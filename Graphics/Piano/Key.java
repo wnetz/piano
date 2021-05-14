@@ -3,8 +3,8 @@ package Graphics.Piano;
 import java.awt.Color;
 
 public class Key {
-    private Color secondaryColor;
-    private Color priamryColor;
+    public final Color secondaryColor;
+    public final Color priamryColor;
     protected int index;
     protected int midiValue;
     protected Color color;

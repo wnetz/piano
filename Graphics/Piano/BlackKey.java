@@ -4,8 +4,8 @@ import java.awt.Color;
 
 public class BlackKey extends Key
 {
-    private Color secondaryColor;
-    private Color priamryColor;
+    public final Color secondaryColor;
+    public final Color priamryColor;
     protected double multiplier;
     protected int x;
 

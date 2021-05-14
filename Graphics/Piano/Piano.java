@@ -13,8 +13,8 @@ public class Piano {
             100, 101, 103, 105, 107, 108 };
     final static public int[] BLACKKEYS = { 22, 25, 27, 30, 32, 34, 37, 39, 42, 44, 46, 49, 51, 54, 56, 58, 61, 63, 66,
             68, 70, 73, 75, 78, 80, 82, 85, 87, 90, 92, 94, 97, 99, 102, 104, 106 };
-    public Key[] whightKeys;
-    public BlackKey[] blackKeys;
+    public static Key[] whightKeys;
+    public static BlackKey[] blackKeys;
 
     public Piano() {
         whightKeys = new Key[NATURAL];
@@ -36,15 +36,15 @@ public class Piano {
         pressedNotes.forEach((n) -> {            
             if (n[0] % 12 == 1 || n[0] % 12 == 3 || n[0] % 12 == 6 || n[0] % 12 == 8 || n[0] % 12 == 10) {
                 for (int i = 0; i < SHARP_FLAT; i++) {
-                    if (this.blackKeys[i].midiValue == n[0]) {
-                        this.blackKeys[i].pressed(n[1] == ON);
+                    if (Piano.blackKeys[i].midiValue == n[0]) {
+                        Piano.blackKeys[i].pressed(n[1] == ON);
                         i = SHARP_FLAT;
                     }
                 }
             } else {
                 for (int i = 0; i < NATURAL; i++) {
-                    if (this.whightKeys[i].midiValue == n[0]) {
-                        this.whightKeys[i].pressed(n[1] == ON);
+                    if (Piano.whightKeys[i].midiValue == n[0]) {
+                        Piano.whightKeys[i].pressed(n[1] == ON);
                         i = NATURAL;
                     }
                 }

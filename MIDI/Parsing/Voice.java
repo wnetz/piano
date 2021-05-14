@@ -44,7 +44,7 @@ public class Voice {
     {
         return tempo;
     }
-    public ArrayList<Chord> getVoice()
+    public ArrayList<Chord> getChords()
     {
         return chords;
     }
