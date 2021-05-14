@@ -83,10 +83,11 @@ public class ProcessSong
                         System.out.println(ties.size());
                         int remove = 0;
                         ArrayList<Double> tie = null;
-                        for(int m = 0; m < ties.size(); m++)
+                        
+                        for(int m = 0; m < ties.size(); m++)//loop on ties
                         {
                             System.out.println("measure: " + ties.get(m).getMeasures() + " fraction: " + ties.get(m).getFraction());
-                            if(ties.get(m).getMeasures() > 0 || (ties.get(m).getMeasures() == 0 && ties.get(m).getFraction() > 0))
+                            if(ties.get(m).getMeasures() > 0 || (ties.get(m).getMeasures() == 0 && ties.get(m).getFraction() > 0))//if tie goes forward
                             {
                                 tie = new ArrayList<Double>();
                                 tie.add(Double.valueOf(index));
@@ -98,13 +99,13 @@ public class ProcessSong
                             else 
                             {   
                                 from = true;                               
-                                for(int n = 0; n < toTie.size(); n++)
+                                for(int n = 0; n < toTie.size(); n++)//loop on current ties
                                 {
                                     if(notes.get(l).getNote() == toTie.get(n).get(1))//does not check if note is on the correct beat
                                     {
-                                        System.out.println("before: " + song.get(toTie.get(n).get(0).intValue()));
+                                        //System.out.println("before: " + song.get(toTie.get(n).get(0).intValue()));
                                         song.get(toTie.get(n).get(0).intValue()).addDuration(duration);
-                                        System.out.println("after: " + song.get(toTie.get(n).get(0).intValue()));                                        
+                                        //System.out.println("after: " + song.get(toTie.get(n).get(0).intValue()));                                        
                                         if(!to)
                                         {
                                             remove = n;
@@ -115,17 +116,17 @@ public class ProcessSong
                                 
                             }
                         }
-                        if(!to && from)
+                        if(!to && from)//if the tie does not continue remove
                         {
-                            System.out.println("remove: " + remove);
+                            //System.out.println("remove: " + remove);
                             toTie.remove(remove);
                         }
-                        if(to && !from)
+                        if(to && !from)//if start of tie add to list
                         {
                             toTie.add(tie);
                         }
-                        System.out.println("toTie: " + toTie);
-                        if(!from)
+                        //System.out.println("toTie: " + toTie);
+                        if(!from)//only add if note is start of a tie or does not tie
                         {
                             song.add(index, new Notes(notes.get(l).getNote(),dynamic,timeSignitureN,timeSignitureD,voiceBeat,duration,tempo));
                         }
