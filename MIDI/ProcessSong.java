@@ -1,31 +1,34 @@
 package MIDI;
 
+import Graphics.Notes;
 import java.util.ArrayList;
-
 import MIDI.Parsing.Chord;
 import MIDI.Parsing.Measure;
 import MIDI.Parsing.Note;
-import Graphics.Notes;
 import MIDI.Parsing.Song;
 import MIDI.Parsing.Tie;
 import MIDI.Parsing.Voice;
 
 public class ProcessSong
 {
+    private int dynamic, timeSignitureD, timeSignitureN ;
+    private double beat, tempo;
     ArrayList<Notes> song;
-    private int timeSignitureN, timeSignitureD, dynamic ;
-    private double tempo,beat;
     ArrayList<ArrayList<Double>> toTie;
+
     public ProcessSong(Song s)
     {
-        song = new ArrayList<Notes>();
-        timeSignitureN = 0;
-        timeSignitureD = 0;
-        dynamic = 0;        
+        dynamic = 0; 
+        timeSignitureD = 0; 
+        timeSignitureN = 0; 
+        beat = 0;             
         tempo = 0;
+        song = new ArrayList<Notes>();
+        toTie = new ArrayList<ArrayList<Double>>();
         
         this.processSong(s);
     }
+    
     public ArrayList<Notes> getSong() {
         return song;
     }
@@ -34,12 +37,13 @@ public class ProcessSong
     {
         this.processHalf(s.getTop());
         this.processHalf(s.getBottom());
-        //System.out.println(song);
     }
+    
     private void processHalf(ArrayList<Measure> half)
     {
-        toTie = new ArrayList<ArrayList<Double>>();
         beat = 0;//track beat through entier song
+        toTie = new ArrayList<ArrayList<Double>>();
+
         for(int i = 0; i < half.size(); i++) //loop on measures
         {   
             ArrayList<Voice> voices = half.get(i).getVoices();
@@ -51,95 +55,32 @@ public class ProcessSong
                 ArrayList<Chord> chords = voices.get(j).getChords();
                 for(int k = 0; k < chords.size(); k++) //loop on chords
                 {
-                    Double duration = chords.get(k).getDuration() * timeSignitureD;//finds how many beats the note is worth
-
-                    ArrayList<Note> notes = chords.get(k).getNotes();
-                    if(chords.get(k).getDot() != 0)//acconts for dots
-                    {
-                        int d = 1;
-                        double multiplier = .5;
-                        while(d != chords.get(k).getDot())
-                        {
-                            multiplier += Math.pow(.5, d);
-                            d++;
-                        }
-                        duration += duration*multiplier;
-                    }
-
                     int index = 0;
-                    if(song.size() != 0)//finds notes position in song
+                    Double duration = chords.get(k).getDuration() * timeSignitureD;//finds how many beats the note is worth
+                    ArrayList<Note> notes = chords.get(k).getNotes();
+
+                    duration += this.dotLength(duration, chords.get(k).getDot());//acconts for dots
+                    
+                    while(index != song.size() && voiceBeat > song.get(index).getTime())//finds notes position in song
                     {
-                        while(index != song.size() && voiceBeat > song.get(index).getTime())
-                        {
-                            index++;
-                        }
+                        index++;
                     }
 
                     for(int l = 0; l < notes.size(); l++) //loop on notes
                     {
-                        ArrayList<Tie> ties = notes.get(l).getTies();
-                        boolean from = false;
-                        boolean to = false;
-                        System.out.println(ties.size());
-                        int remove = 0;
-                        ArrayList<Double> tie = null;
-                        
-                        for(int m = 0; m < ties.size(); m++)//loop on ties
-                        {
-                            System.out.println("measure: " + ties.get(m).getMeasures() + " fraction: " + ties.get(m).getFraction());
-                            if(ties.get(m).getMeasures() > 0 || (ties.get(m).getMeasures() == 0 && ties.get(m).getFraction() > 0))//if tie goes forward
-                            {
-                                tie = new ArrayList<Double>();
-                                tie.add(Double.valueOf(index));
-                                tie.add(Double.valueOf(notes.get(l).getNote()));
-                                tie.add(Double.valueOf(ties.get(m).getMeasures()*timeSignitureN + ties.get(m).getFraction()*timeSignitureD + voiceBeat));                                
-                                System.out.println(tie + " measure: " + ties.get(m).getMeasures() + " fraction: " + ties.get(m).getFraction());
-                                to = true;
-                            }
-                            else 
-                            {   
-                                from = true;                               
-                                for(int n = 0; n < toTie.size(); n++)//loop on current ties
-                                {
-                                    if(notes.get(l).getNote() == toTie.get(n).get(1))//does not check if note is on the correct beat
-                                    {
-                                        //System.out.println("before: " + song.get(toTie.get(n).get(0).intValue()));
-                                        song.get(toTie.get(n).get(0).intValue()).addDuration(duration);
-                                        //System.out.println("after: " + song.get(toTie.get(n).get(0).intValue()));                                        
-                                        if(!to)
-                                        {
-                                            remove = n;
-                                        }
-                                        n = toTie.size();
-                                    }
-                                }
-                                
-                            }
-                        }
-                        if(!to && from)//if the tie does not continue remove
-                        {
-                            //System.out.println("remove: " + remove);
-                            toTie.remove(remove);
-                        }
-                        if(to && !from)//if start of tie add to list
-                        {
-                            toTie.add(tie);
-                        }
-                        //System.out.println("toTie: " + toTie);
-                        if(!from)//only add if note is start of a tie or does not tie
-                        {
-                            song.add(index, new Notes(notes.get(l).getNote(),dynamic,timeSignitureN,timeSignitureD,voiceBeat,duration,tempo));
-                        }
+                        this.addNotes(notes.get(l), index, voiceBeat, duration);//deals with notes and ties
                     }
                     voiceBeat += duration;
                 }
             }
-            beat += timeSignitureN;
+            beat += timeSignitureN;//add a measurs worth of beats
         }
     }
+    
     private void updateValues(Voice voice)
     {
         int [] timeSig = voice.getTimeSigniture();
+
         if(timeSig[0] != 0 && timeSig[1] != 0)
         {
             timeSignitureN = timeSig[0];
@@ -153,6 +94,76 @@ public class ProcessSong
         {
             tempo = Math.round(voice.getTempo()*60);
             tempo = tempo/60.0;
+        }
+    }
+    private double dotLength(double duration,int dots)
+    {
+        int dot = 1;
+        double multiplier;
+
+        if(dots != 0)
+        {
+            multiplier = .5;
+            while(dot != dots)
+            {
+                multiplier += Math.pow(.5, dot);
+                dot++;
+            }
+        }
+        else
+        {
+            multiplier = 0;
+        }
+        return duration*multiplier;
+    }
+    
+    private void addNotes(Note note, int index, double beat, double duration)
+    {
+        boolean from = false;
+        boolean to = false;
+        int remove = 0;
+        ArrayList<Double> tie = null;
+        ArrayList<Tie> ties = note.getTies();
+        
+        for(int i = 0; i < ties.size(); i++)//loop on ties
+        {
+            if(ties.get(i).getMeasures() > 0 || (ties.get(i).getMeasures() == 0 && ties.get(i).getFraction() > 0))//if tie goes forward
+            {
+                tie = new ArrayList<Double>();
+                tie.add(Double.valueOf(index));
+                tie.add(Double.valueOf(note.getNote()));
+                tie.add(Double.valueOf(ties.get(i).getMeasures()*timeSignitureN + ties.get(i).getFraction()*timeSignitureD + beat));
+                to = true;
+            }
+            else 
+            {   
+                from = true;                               
+                for(int n = 0; n < toTie.size(); n++)//loop on current ties
+                {
+                    if(note.getNote() == toTie.get(n).get(1))//does not check if note is on the correct beat
+                    {
+                        song.get(toTie.get(n).get(0).intValue()).addDuration(duration);                                       
+                        if(!to)
+                        {
+                            remove = n;
+                        }
+                        n = toTie.size();
+                    }
+                }
+                
+            }
+        }
+        if(!to && from)//if the tie does not continue remove
+        {
+            toTie.remove(remove);
+        }
+        if(to && !from)//if start of tie add to list
+        {
+            toTie.add(tie);
+        }
+        if(!from)//only add if note is start of a tie or does not tie
+        {
+            song.add(index, new Notes(dynamic, note.getNote(), timeSignitureD, timeSignitureN, tempo, duration, beat));
         }
     }
 }

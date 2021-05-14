@@ -1,53 +1,57 @@
 package Graphics;
 
 public class Notes {
-    private int note, volume, n, d;
-    private double time, duration, bps;
+    private int dynamic, note, timeSignitureD, timeSignitureN;
+    private double bps, duration, time;
 
-    public Notes(int note,int volume, int n, int d,double time, double duration, double bps)
+    public Notes(int dynamic, int note, int timeSignitureD, int timeSignitureN, double bps, double duration, double time )
     {
+        this.timeSignitureD = timeSignitureD;
         this.note = note;
-        this.volume = volume;
-        this.n = n;
-        this.d = d;
-        this.time = time;
-        this.duration = duration;
+        this.timeSignitureN = timeSignitureN;
+        this.dynamic = dynamic;
         this.bps = bps;
+        this.duration = duration;
+                this.time = time;
+    }
+    
+    public int getDynamic()
+    {
+        return dynamic;
     }
     public int getNote()
     {
         return note;
     }
-    public int getVolume()
+    public int getTimeSignitureD()
     {
-        return volume;
+        return timeSignitureD;
     }
-    public int getN()
+    public int getTimeSignitureN()
     {
-        return n;
-    }
-    public int getD()
-    {
-        return d;
-    }
-    public double getTime()
-    {
-        return time;
-    }
-    public double getDuration()
-    {
-        return duration;
+        return timeSignitureN;
     }
     public double getBPS()
     {
         return bps;
     }
+    public double getDuration()
+    {
+        return duration;
+    }
+    public double getTime()
+    {
+        return time;
+    }
+    
     public void addDuration(double duration)
     {
         this.duration += duration;
     }
+    
     @Override
-    public String toString() {
+    public String toString() 
+    {
         // TODO Auto-generated method stub
         return "N: " + note + " T: " + time + " D: " + duration ;
     }

@@ -17,9 +17,10 @@ public class Tie {
     {
         return fraction;
     }
+    
     @Override
-    public String toString() {
-        // TODO Auto-generated method stub
+    public String toString() 
+    {
         return "Measures: " + measures + " Fraction/Off: " + fraction;
     }
 }

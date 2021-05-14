@@ -1,91 +1,110 @@
 package MIDI;
 
-import javax.sound.midi.*;
-
-import MIDI.Parsing.Note;
-
 import java.io.File;
 import java.io.IOException;
-
 import java.util.ArrayList;
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiDevice;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.Receiver;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
+import javax.sound.midi.Track;
+import javax.sound.midi.Transmitter;
+import MIDI.Parsing.Note;
 
-public class MIDI implements Runnable {
-	MidiDevice inputDevice;
-	Receiver receiver;
+public class MIDI implements Runnable 
+{	
+	private boolean get;				//track state
+	private boolean stopRequested;		//track state
+	private int device;					//-----------------------------cheat for now---------------------------------------
+	private ArrayList<Note> notes;
+	private ArrayList<Note> returnNotes;//used to prevent consecutive writes
+	private Dictionarys dictionary;
+	private MidiDevice inputDevice;
+	private Receiver receiver;
+	private Sequence seq;
+	private Sequencer sequencer;
+	private Track currentTrack;
+	private Transmitter transmitter;
 
-	Sequence seq;
-	Sequencer sequencer;
-	Track currentTrack;
-	Transmitter transmitter;
-	Dictionarys dictionary;
-	int device;
-	ArrayList<Note> notes;
-	ArrayList<Note> returnNotes;
-
-	private boolean stopRequested = false;
-	private boolean get = false;
-
-	public MIDI() {
-		dictionary = new Dictionarys();
+	public MIDI() 
+	{
+		get = false;
+		stopRequested = false;
 		device = 5;
-
 		notes = new ArrayList<Note>();
 		returnNotes = new ArrayList<Note>();
+		dictionary = new Dictionarys();
 
 		// all MIDI devices
-		for (int i = 0; i < MidiSystem.getMidiDeviceInfo().length; i++) {
+		/*for (int i = 0; i < MidiSystem.getMidiDeviceInfo().length; i++) {
 			System.out.println(MidiSystem.getMidiDeviceInfo()[i].getName() + " - "
 					+ MidiSystem.getMidiDeviceInfo()[i].getDescription());
-		}
+		}*/
 
 		try {
-			inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[device]);// piano
-			sequencer = MidiSystem.getSequencer();
-
 			// Open a connection to your input device
+			inputDevice = MidiSystem.getMidiDevice(MidiSystem.getMidiDeviceInfo()[device]);// piano
 			inputDevice.open();
-			// Open a connection to the default sequencer (as specified by MidiSystem)
-			sequencer.open();
 			// Get the transmitter class from your input device
 			transmitter = inputDevice.getTransmitter();
+
+			// Open a connection to the default sequencer (as specified by MidiSystem)
+			sequencer = MidiSystem.getSequencer();
+			sequencer.open();			
 			// Get the receiver class from your sequencer
 			receiver = sequencer.getReceiver();
+
 			// Bind the transmitter to the receiver so the receiver gets input from the
 			// transmitter
 			transmitter.setReceiver(receiver);
+
 			// Create a new sequence
 			seq = new Sequence(Sequence.PPQ, 60);
+
 			// And of course a track to record the input on
 			currentTrack = seq.createTrack();
-			// Do some sequencer settings
+
+			
 			sequencer.setSequence(seq);
-		} catch (MidiUnavailableException e) {
+
+		} 
+		catch (MidiUnavailableException e) 
+		{
 			System.out.println(e.getMessage());
-		} catch (InvalidMidiDataException e) {
+		} 
+		catch (InvalidMidiDataException e) 
+		{
 			System.out.println(e.getMessage());
 		}
+
+		// Do some sequencer settings
 		sequencer.setTempoInBPM(60);
 		sequencer.setTickPosition(0);
 		sequencer.recordEnable(currentTrack, -1);
-		// And start recording
+		// start recording
 		sequencer.startRecording();
 	}
 
-	public synchronized void requestStop() {
+	public synchronized void requestStop()//sent from main when it watns to shutdown 
+	{
 		stopRequested = true;
 	}
-
-	private synchronized boolean isStopRequested() {
+	private synchronized boolean isStopRequested()//these two are "synchronized" to avoid concurent writes 
+	{
 		return this.stopRequested;
 	}
 
-	public ArrayList<Note> getNotes() {
-		get = true;
-		while(get)
+	public ArrayList<Note> getNotes() 
+	{
+		get = true;//request to get notes
+		while(get)//while permissinon is not given
 		{
 			try
 			{
-				Thread.sleep(1);
+				Thread.sleep(1);//sleep to allow thread to do other things
 			}
 			catch(IllegalArgumentException e)
 			{
@@ -101,37 +120,29 @@ public class MIDI implements Runnable {
 	}
 
 	@Override
-	public void run() {
-		//long time = System.currentTimeMillis();
-		// currentTrack.remove(currentTrack.get(0));
-		// Stop recording
-		while (!isStopRequested()) {			
-			if(get)
+	public void run() 
+	{
+		while (!isStopRequested())//runs infinetly until stop requested 
+		{			
+			if(get)//if get requested
 			{	
+				//update return notes and notes
 				returnNotes.clear();
-				notes.forEach((n)-> returnNotes.add(n));
-				notes.clear();				
-				get = false;			
-			}
-			// cycle through all unread notes
-			for (int j = 0; j < currentTrack.size() - 1; j += 0) {
-				// System.out.println(currentTrack.get(j).getMessage().getStatus());
+				notes.forEach((n)-> returnNotes.add(n));//deep copy
+				notes.clear();
 
+				get = false;//give permission			
+			}
+			
+			for (int j = 0; j < currentTrack.size() - 1; j += 0)// cycle through all unread notes 
+			{
 				byte[] n = currentTrack.get(j).getMessage().getMessage();
 				Note note = new Note((n[1] & 0xff),(n[2] & 0xff),(currentTrack.get(j).getTick()),(n[0] & 0xff));
 				notes.add(note);
-				System.out.println(note);
-				// System.out.print(note);
-				// System.out.println("| " + currentTrack.get(j).getTick() + " Diff" +
-				// ((System.currentTimeMillis() - 1000*(currentTrack.get(j).getTick()/120.0))-
-				// time));
-				// 144 on
 
 				// revove note so we dont read it more than once
 				currentTrack.remove(currentTrack.get(j));
-			}
-			//if(notes.size()>0)
-				//System.out.println("get " + notes + " " + System.currentTimeMillis());			
+			}			
 		}
 		// Tell sequencer to stop recording
 		sequencer.stopRecording();
@@ -140,9 +151,12 @@ public class MIDI implements Runnable {
 		Sequence tmp = sequencer.getSequence();
 
 		// Save to file
-		try {
+		try 
+		{
 			MidiSystem.write(tmp, 0, new File("MyMidiFile.mid"));
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			System.out.println(e.getMessage());
 		}
 
@@ -150,14 +164,5 @@ public class MIDI implements Runnable {
 
 		inputDevice.close();
 		sequencer.close();
-	}
-
-	public static String[] List() {
-		String[] list = new String[MidiSystem.getMidiDeviceInfo().length];
-		for (int i = 0; i < MidiSystem.getMidiDeviceInfo().length; i++) {
-			list[i] = MidiSystem.getMidiDeviceInfo()[i].getName() + " - "
-					+ MidiSystem.getMidiDeviceInfo()[i].getDescription();
-		}
-		return list;
 	}
 }

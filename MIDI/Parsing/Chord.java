@@ -2,17 +2,19 @@ package MIDI.Parsing;
 
 import java.util.ArrayList;
 
-public class Chord {
-    private ArrayList<Note> notes;
+public class Chord 
+{    
     private int dot;
     private double duration;
+    private ArrayList<Note> notes;
 
     public Chord()
-    {
-        notes = new ArrayList<Note>();
+    {        
         this.dot = 0;
         this.duration = 0;
+        notes = new ArrayList<Note>();
     }
+    
     public void setDot(int d) 
     {
         dot = d;
@@ -25,10 +27,7 @@ public class Chord {
     {
         notes.add(note);
     }
-    public ArrayList<Note> getNotes()
-    {
-        return notes;
-    }
+    
     public int getDot()
     {
         return dot;
@@ -37,8 +36,14 @@ public class Chord {
     {
         return duration;
     }
+    public ArrayList<Note> getNotes()
+    {
+        return notes;
+    }
+
     @Override
-    public String toString() {
+    public String toString() 
+    {
         // TODO Auto-generated method stub
         return "Notes: " + notes.size() + " Dot: " + dot + " Duration: " + duration;
     }

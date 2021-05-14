@@ -9,16 +9,20 @@ public class Measure {
     {
         voices = new ArrayList<Voice>();
     } 
+    
     public void addVoice(Voice voice)   
     {
         voices.add(voice);
     }
+    
     public ArrayList<Voice> getVoices()
     {
         return voices;
     }
+    
     @Override
-    public String toString() {
+    public String toString() 
+    {
         // TODO Auto-generated method stub
         return "Voices: " + voices.size();
     }

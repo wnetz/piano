@@ -3,18 +3,36 @@ package MIDI.Parsing;
 import java.util.ArrayList;
 
 public class Voice {
-    private int timeSignitureN, timeSignitureD, dynamic;
+    private int dynamic, timeSignitureD, timeSignitureN;
     private double tempo;
     private ArrayList<Chord> chords;
 
     public Voice()
     {
-        this.timeSignitureN = 0;
-        this.timeSignitureD = 0;
-        this.dynamic = 0;
-        this.tempo = 0;
+        dynamic = 0;
+        timeSignitureD = 0;
+        timeSignitureN = 0;
+        tempo = 0;
         chords = new ArrayList<Chord>();
     }
+        
+    public int[] getTimeSigniture()
+    {
+        return new int[]{timeSignitureN, timeSignitureD};
+    }
+    public int getDynamic()
+    {
+        return dynamic;
+    }
+    public double getTempo()
+    {
+        return tempo;
+    }
+    public ArrayList<Chord> getChords()
+    {
+        return chords;
+    }
+    
     public void setTimeSigniture(int[] timeSigniture)
     {
         timeSignitureN = timeSigniture[0];
@@ -32,25 +50,11 @@ public class Voice {
     {
         chords.add(chord);
     }
-    public int[] getTimeSigniture()
-    {
-        return new int[]{timeSignitureN, timeSignitureD};
-    }
-    public int getDynamic()
-    {
-        return dynamic;
-    }
-    public double getTempo()
-    {
-        return tempo;
-    }
-    public ArrayList<Chord> getChords()
-    {
-        return chords;
-    }
+    
+
     @Override
-    public String toString() {
-        // TODO Auto-generated method stub
+    public String toString()
+    {
         String out = "Chords: " + chords.size();
         if(timeSignitureN != 0)
         {

@@ -142,27 +142,21 @@ public class Dictionarys {
 	public int getClef(String key) {
 		return clef.get(key);
 	}
-
 	public int getExpression(String key) {
 		return expression.get(key);
 	}
-
 	public String getKey(int key) {
 		return keyLong.get(key);
 	}
-
 	public String getKeyList(String key) {
 		return keyList.get(keyShort.get(key));
 	}
-
 	public int getKey(String key) {
 		return keyShort.get(key);
 	}
-
 	public int getNote(String key) {
 		return notes.get(key);
 	}
-
 	public String getVolume(int velocity) {
 		int diff = 128;
 		String closest = "";
@@ -174,7 +168,6 @@ public class Dictionarys {
 		}
 		return closest;
 	}
-
 	public int getVolume(String key) {
 		return volumeInt.get(key);
 	}

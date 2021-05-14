@@ -2,40 +2,42 @@ package Graphics.Piano;
 
 import java.awt.Color;
 
-public class Key {
-    public final Color secondaryColor;
-    public final Color priamryColor;
-    protected int index;
-    protected int midiValue;
+public class Key 
+{
+    public static final Color PRIMARY_COLOR = Color.WHITE, SECODARY_COLOR = Color.CYAN;
+    protected int index, midiValue;
     protected Color color;
 
-    public Key(int index, int midiValue) {
-        priamryColor = Color.WHITE;
-        secondaryColor = Color.CYAN;
-
+    public Key(int index, int midiValue) 
+    {
         this.index = index;
         this.midiValue = midiValue;
-        color = this.priamryColor;
+        color = PRIMARY_COLOR;
     }
-
-    public int getIndex() {
+    
+    public int getIndex() 
+    {
         return index;
     }
-
-    public int getMidiValue() {
+    public int getMidiValue() 
+    {
         return midiValue;
     }
-
-    public Color pressed(boolean pressed) {
-        if (pressed) {
-            this.color = secondaryColor;
-        } else {
-            this.color = priamryColor;
+    
+    public Color pressed(boolean pressed) 
+    {
+        if (pressed) 
+        {
+            this.color = SECODARY_COLOR;
+        } 
+        else 
+        {
+            this.color = PRIMARY_COLOR;
         }
         return this.color;
     }
-
-    public Color getColor() {
+    public Color getColor() 
+    {
         return this.color;
     }
 

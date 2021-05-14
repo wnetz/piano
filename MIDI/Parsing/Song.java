@@ -2,22 +2,16 @@ package MIDI.Parsing;
 
 import java.util.ArrayList;
 
-public class Song {
-    private ArrayList<Measure> top, bottom;
+public class Song 
+{
+    private ArrayList<Measure> bottom, top;
 
     public Song()
     {
-        top = new ArrayList<Measure>();
         bottom = new ArrayList<Measure>();
+        top = new ArrayList<Measure>();
     }
-    public void addTop(Measure measure)
-    {
-        top.add(measure);
-    }
-    public void addBottom(Measure measure)
-    {
-        bottom.add(measure);
-    }
+    
     public ArrayList<Measure> getTop()
     {
         return top;
@@ -26,14 +20,25 @@ public class Song {
     {
         return bottom;
     }
+    
+    public void addTop(Measure measure)
+    {
+        top.add(measure);
+    }
+    public void addBottom(Measure measure)
+    {
+        bottom.add(measure);
+    }
+    
     public void clear()
     {
         top.clear();
         bottom.clear();
     }
+    
     @Override
-    public String toString() {
-        // TODO Auto-generated method stub
+    public String toString() 
+    {
         return "Top: " + top.size() + " Bottom: " + bottom.size();
     }
 }
