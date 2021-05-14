@@ -1,8 +1,11 @@
 package MIDI.Parsing;
 
+import java.util.ArrayList;
+
 public class Note {
     private int note, volume, onOff;
     private long time;
+    private ArrayList<Tie> ties;
 
     public Note(int note,int volume, long time, int onOff)
     {
@@ -10,6 +13,15 @@ public class Note {
         this.volume = volume;
         this.time = time;
         this.onOff = onOff;
+        this.ties = new ArrayList<Tie>();
+    }
+    public Note()
+    {
+        this.note = 0;
+        this.volume = 0;
+        this.time = 0;
+        this.onOff = 0;
+        this.ties = new ArrayList<Tie>();
     }
     public int getNote()
     {
@@ -26,6 +38,18 @@ public class Note {
     public int getOnOff()
     {
         return onOff;
+    }
+    public ArrayList<Tie> getTies()
+    {
+        return ties;
+    }
+    public void setNote(int note)
+    {
+        this.note = note;
+    }
+    public void addTie(Tie tie)
+    {
+        ties.add(tie);
     }
     @Override
     public String toString() {

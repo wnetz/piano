@@ -11,18 +11,10 @@ public class Parser {
     private Song song;
     private Scanner file;
     private String in;
-    private ArrayList<Integer> tie;
-    private boolean addTie;
-    private boolean removeTie;
-    private double dur;
 
     public Parser()
     {
         song = new Song();
-        tie = new ArrayList<Integer>();
-        addTie = false;
-        removeTie = false;
-        dur = 0;
     }
     public Song parse(String name)
     {
@@ -57,25 +49,6 @@ public class Parser {
             if(in.indexOf("<Measure>") != -1)
             {
                 staff.add(this.parseMeasure());
-                if(dur != 0)
-                {
-                    for( int i = staff.size()-1; i != 0; i--)
-                    {
-                        Measure measure = staff.get(i);
-                        for(int j = measure.getVoices().size()-1; j != 0; j--)
-                        {
-                            Voice voice = measure.getVoices().get(j);
-                            for(int k = voice.getChords().size()-1; k != 0; k--)
-                            {
-                                Chord chord = voice.getChords().get(k);
-                                for(int l = chord.getNotes().size()-1; l != 0; l--)
-                                {
-                                    
-                                }
-                            }
-                        }
-                    }
-                }
             }
         }while(in.indexOf("</Staff>") == -1);
         
@@ -216,15 +189,7 @@ public class Parser {
             else if(in.indexOf("<Note>") != -1)
             {
                 Note n = this.parseNote();
-                if(!removeTie)
-                {
-                    chord.addNote(n);
-                }  
-                else
-                {
-                    removeTie = false;
-                    dur = chord.getDuration();
-                }            
+                chord.addNote(n);           
             }
         }while(in.indexOf("</Chord>") == -1);
         //System.out.println(chord);
@@ -273,41 +238,42 @@ public class Parser {
     }
     private Note parseNote()
     {
-        int note = 0;
+        int pitch = 0;
+        Note note = new Note();
         do
         {
             in = file.nextLine();            
-            if(in.indexOf("<next>") != -1)
+            if(in.indexOf("<next>") != -1 || in.indexOf("<prev>") != -1)
             {
-                System.out.println("nxt " + in);
-                addTie = true;
-            }
-            else if(in.indexOf("<prev>") != -1)
-            {
-                System.out.println("prv " + in);
-                removeTie = true;
+                note.addTie(this.parseTie());
             }
             else if(in.indexOf("<pitch>") != -1)
             {
-                System.out.println("not " + in);
-                note = Integer.parseInt(in.substring(in.indexOf(">")+1,in.indexOf("</pitch>")));
-                if(addTie)
-                {
-                    addTie = false;
-                    tie.add(note);
-                    System.out.println(tie);
-                }
-                if(removeTie)
-                {
-                    tie.remove(Integer.valueOf(note));
-                }  
-            }
-            else
-            {
-                System.out.println("ppp " + in);
+                pitch = Integer.parseInt(in.substring(in.indexOf(">")+1,in.indexOf("</pitch>"))); 
+                note.setNote(pitch);
             }
         }while(in.indexOf("</Note>") == -1);
-        System.out.println("Pitch: " + note);
-        return new Note(note, 0, 0, 0);
+        //System.out.println("Pitch: " + pitch);
+        return note;
+    }
+    private Tie parseTie()
+    {
+        int measure = 0;
+        double fraction = 0;
+        do
+        {
+            in = file.nextLine(); 
+            if(in.indexOf("<measures>") != -1)
+            {
+                measure = Integer.parseInt(in.substring(in.indexOf(">")+1,in.indexOf("</measures>")));
+            }
+            if(in.indexOf("<fractions>") != -1)
+            {
+                int n = Integer.parseInt(in.substring(in.indexOf(">")+1,in.indexOf("/")));
+                int d = Integer.parseInt(in.substring(in.indexOf("/")+1,in.indexOf("</fractions>")));
+                fraction = (double)n/d;
+            }
+        }while(in.indexOf("</next>") == -1 && in.indexOf("</prev>") == -1);
+        return new Tie(measure,fraction);
     }
 }

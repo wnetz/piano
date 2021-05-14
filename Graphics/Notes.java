@@ -42,6 +42,10 @@ public class Notes {
     {
         return bps;
     }
+    public void addDuration(double duration)
+    {
+        this.duration += duration;
+    }
     @Override
     public String toString() {
         // TODO Auto-generated method stub
