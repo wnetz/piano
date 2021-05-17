@@ -1,49 +1,43 @@
-import Graphics.Frame;
-import Graphics.Piano.Piano;
-import java.util.ArrayList;
-import java.util.Scanner;
-import MIDI.MIDI;
-import MIDI.Parsing.Note;
+
+import Graphics.SongPage;
+import MIDI.ProcessSong;
 import MIDI.Parsing.Parser;
 import MIDI.Parsing.Song;
-import MIDI.ProcessSong;
+import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class PianoProject 
+public class PianoProject extends Application
 {
-    public static void main(String args[])
-    {
-        
-        ArrayList<Integer[]> pressed = new ArrayList<Integer[]>();
-        MIDI midi = new MIDI();
-        Parser parser = new Parser();       
-        Piano piano = new Piano();        
-        Scanner scan = new Scanner(System.in);        
-        String filePath = ".\\MIDI\\Parsing\\";
-        Thread midiThread = new Thread(midi);
+    Stage window;
 
-        midiThread.setDaemon(true);
-        midiThread.start();
-        
+    @Override
+    public void start(Stage primaryStage)
+    {
+        Parser parser = new Parser();         
+        String filePath = ".\\MIDI\\Parsing\\";
         Song song = parser.parse(filePath + "Watashi_no_Uso.mscx");//scan.nextLine()
         ProcessSong ps = new ProcessSong(song);
-        Frame frame = new Frame(ps.getSong());
+
+        window = primaryStage;       
+        SongPage songPage = new SongPage(ps.getSong());
+        Scene scene = new Scene(songPage.getVbox(),600,600);
+        songPage.heightProperty().bind(scene.heightProperty());
+        songPage.widthProperty().bind(scene.widthProperty());
         
+        ChangeListener<Number> resize = (observable,oldvalue,newvalue) -> {
+            songPage.update();
+        };
+        scene.widthProperty().addListener(resize);
+        scene.heightProperty().addListener(resize);
 
-        while (true) 
-        {
-            ArrayList<Note> notes = midi.getNotes();
-            
-            notes.forEach((n) -> 
-            {
-                pressed.add(new Integer[]{n.getNote(),n.getOnOff()});
-            });
-            
-            piano.pressed(pressed);
-            pressed.clear();
-
-        }
-        //midi.requestStop();
-
-        //scan.close();
+        window.setTitle("pp");
+        window.setScene(scene);
+        window.show();
+    }
+    public static void main(String[] args) 
+    {
+        launch(args);
     }
 }

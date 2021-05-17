@@ -1,6 +1,6 @@
 package Graphics.Piano;
 
-import java.awt.Color;
+import javafx.scene.paint.Color;
 
 public class Key 
 {

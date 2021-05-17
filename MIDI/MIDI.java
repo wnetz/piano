@@ -3,6 +3,9 @@ package MIDI;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.concurrent.ExecutionException;
+
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
@@ -13,21 +16,31 @@ import javax.sound.midi.Sequencer;
 import javax.sound.midi.Track;
 import javax.sound.midi.Transmitter;
 import MIDI.Parsing.Note;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.DoublePropertyBase;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.scene.paint.Color;
 
-public class MIDI implements Runnable 
+public class MIDI extends ScheduledService<ArrayList<Note>> 
 {	
 	private boolean get;				//track state
 	private boolean stopRequested;		//track state
 	private int device;					//-----------------------------cheat for now---------------------------------------
 	private ArrayList<Note> notes;
 	private ArrayList<Note> returnNotes;//used to prevent consecutive writes
-	private Dictionarys dictionary;
 	private MidiDevice inputDevice;
 	private Receiver receiver;
 	private Sequence seq;
 	private Sequencer sequencer;
 	private Track currentTrack;
 	private Transmitter transmitter;
+	private Task<ArrayList<Note>> t;
 
 	public MIDI() 
 	{
@@ -36,7 +49,23 @@ public class MIDI implements Runnable
 		device = 5;
 		notes = new ArrayList<Note>();
 		returnNotes = new ArrayList<Note>();
-		dictionary = new Dictionarys();
+		
+
+		setOnSucceeded(s ->
+		{
+			t.cancel();
+		});
+		setOnReady(s -> 
+		{
+			//System.out.println(get);
+			if(get)
+			{
+				System.out.println("cancle");
+				t.cancel();
+				
+			}
+		});
+		
 
 		// all MIDI devices
 		/*for (int i = 0; i < MidiSystem.getMidiDeviceInfo().length; i++) {
@@ -70,6 +99,7 @@ public class MIDI implements Runnable
 			
 			sequencer.setSequence(seq);
 
+
 		} 
 		catch (MidiUnavailableException e) 
 		{
@@ -80,12 +110,39 @@ public class MIDI implements Runnable
 			System.out.println(e.getMessage());
 		}
 
+
 		// Do some sequencer settings
 		sequencer.setTempoInBPM(60);
 		sequencer.setTickPosition(0);
 		sequencer.recordEnable(currentTrack, -1);
 		// start recording
 		sequencer.startRecording();
+	}
+
+	@Override
+	protected Task<ArrayList<Note>> createTask()
+	{		
+		//System.out.println("new");
+		t = new GetMIDI(currentTrack);
+		t.run();
+		try
+		{
+			notes = (ArrayList)t.get();
+			if(notes.size()!=0)
+			{
+				//System.out.println(notes);
+			}
+		}
+		catch(InterruptedException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		catch(ExecutionException e)
+		{
+			System.out.println(e.getMessage());
+		}
+		
+		return t;
 	}
 
 	public synchronized void requestStop()//sent from main when it watns to shutdown 
@@ -96,42 +153,39 @@ public class MIDI implements Runnable
 	{
 		return this.stopRequested;
 	}
-
+	
 	public ArrayList<Note> getNotes() 
 	{
-		get = true;//request to get notes
-		while(get)//while permissinon is not given
-		{
-			try
-			{
-				Thread.sleep(1);//sleep to allow thread to do other things
-			}
-			catch(IllegalArgumentException e)
-			{
-				System.out.println(e.getMessage());
-			}
-			catch(InterruptedException e)
-			{
-				System.out.println(e.getMessage());
-			}
-			
-		}	
-		return returnNotes;		
+		get = true;//request to get notes	
+		return notes;		
+	}
+	public void done()
+	{
+		get = false;
+		notes.clear();
 	}
 
-	@Override
+	/*@Override
 	public void run() 
 	{
+		
 		while (!isStopRequested())//runs infinetly until stop requested 
-		{			
+		{	
+			System.out.println("in");		
 			if(get)//if get requested
 			{	
 				//update return notes and notes
 				returnNotes.clear();
 				notes.forEach((n)-> returnNotes.add(n));//deep copy
 				notes.clear();
+				notesProperty.set(0);
 
 				get = false;//give permission			
+			}
+
+			if(currentTrack.size() != 0)
+			{
+				notesProperty.set(1);
 			}
 			
 			for (int j = 0; j < currentTrack.size() - 1; j += 0)// cycle through all unread notes 
@@ -164,5 +218,5 @@ public class MIDI implements Runnable
 
 		inputDevice.close();
 		sequencer.close();
-	}
+	}*/
 }

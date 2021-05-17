@@ -37,6 +37,28 @@ public class ProcessSong
     {
         this.processHalf(s.getTop());
         this.processHalf(s.getBottom());
+        double size = song.get(song.size()-1).getTime() + song.get(song.size()-1).getDuration();
+        for(int i = 0; i <= size; i++)
+        {
+            boolean in = false;
+            for(int j = 0; j < song.size();j++)
+            {
+                if(song.get(j).getTime() == i)
+                {
+                    in = true;
+                    j = song.size();
+                }
+            }
+            if(!in)
+            {
+                int index = 0;
+                while(index != song.size() && i > song.get(index).getTime())//finds notes position in song
+                {
+                    index++;
+                }
+                this.addNotes(new Note(0, 0, 0, 0), index, i, 0);
+            }
+        }
     }
     
     private void processHalf(ArrayList<Measure> half)
@@ -69,6 +91,7 @@ public class ProcessSong
                     for(int l = 0; l < notes.size(); l++) //loop on notes
                     {
                         this.addNotes(notes.get(l), index, voiceBeat, duration);//deals with notes and ties
+                        index++;
                     }
                     voiceBeat += duration;
                 }
@@ -94,6 +117,7 @@ public class ProcessSong
         {
             tempo = Math.round(voice.getTempo()*60);
             tempo = tempo/60.0;
+            System.out.println(tempo + " " + tempo*60);
         }
     }
     private double dotLength(double duration,int dots)
@@ -142,7 +166,7 @@ public class ProcessSong
                 {
                     if(note.getNote() == toTie.get(n).get(1))//does not check if note is on the correct beat
                     {
-                        song.get(toTie.get(n).get(0).intValue()).addDuration(duration);                                       
+                        song.get(toTie.get(n).get(0).intValue()).addDuration(duration);                                     
                         if(!to)
                         {
                             remove = n;
@@ -164,6 +188,6 @@ public class ProcessSong
         if(!from)//only add if note is start of a tie or does not tie
         {
             song.add(index, new Notes(dynamic, note.getNote(), timeSignitureD, timeSignitureN, tempo, duration, beat));
-        }
+        }        
     }
 }
