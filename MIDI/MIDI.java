@@ -1,9 +1,6 @@
 package MIDI;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Timer;
 import java.util.concurrent.ExecutionException;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -16,24 +13,14 @@ import javax.sound.midi.Sequencer;
 import javax.sound.midi.Track;
 import javax.sound.midi.Transmitter;
 import MIDI.Parsing.Note;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.DoublePropertyBase;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.concurrent.ScheduledService;
-import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.scene.paint.Color;
 
 public class MIDI extends ScheduledService<ArrayList<Note>> 
 {	
 	private boolean get;				//track state
-	private boolean stopRequested;		//track state
 	private int device;					//-----------------------------cheat for now---------------------------------------
 	private ArrayList<Note> notes;
-	private ArrayList<Note> returnNotes;//used to prevent consecutive writes
 	private MidiDevice inputDevice;
 	private Receiver receiver;
 	private Sequence seq;
@@ -45,10 +32,8 @@ public class MIDI extends ScheduledService<ArrayList<Note>>
 	public MIDI() 
 	{
 		get = false;
-		stopRequested = false;
 		device = 5;
 		notes = new ArrayList<Note>();
-		returnNotes = new ArrayList<Note>();
 		
 
 		setOnSucceeded(s ->
@@ -127,7 +112,7 @@ public class MIDI extends ScheduledService<ArrayList<Note>>
 		t.run();
 		try
 		{
-			notes = (ArrayList)t.get();
+			notes = (ArrayList<Note>)t.get();
 			if(notes.size()!=0)
 			{
 				//System.out.println(notes);
@@ -144,15 +129,6 @@ public class MIDI extends ScheduledService<ArrayList<Note>>
 		
 		return t;
 	}
-
-	public synchronized void requestStop()//sent from main when it watns to shutdown 
-	{
-		stopRequested = true;
-	}
-	private synchronized boolean isStopRequested()//these two are "synchronized" to avoid concurent writes 
-	{
-		return this.stopRequested;
-	}
 	
 	public ArrayList<Note> getNotes() 
 	{
@@ -164,59 +140,4 @@ public class MIDI extends ScheduledService<ArrayList<Note>>
 		get = false;
 		notes.clear();
 	}
-
-	/*@Override
-	public void run() 
-	{
-		
-		while (!isStopRequested())//runs infinetly until stop requested 
-		{	
-			System.out.println("in");		
-			if(get)//if get requested
-			{	
-				//update return notes and notes
-				returnNotes.clear();
-				notes.forEach((n)-> returnNotes.add(n));//deep copy
-				notes.clear();
-				notesProperty.set(0);
-
-				get = false;//give permission			
-			}
-
-			if(currentTrack.size() != 0)
-			{
-				notesProperty.set(1);
-			}
-			
-			for (int j = 0; j < currentTrack.size() - 1; j += 0)// cycle through all unread notes 
-			{
-				byte[] n = currentTrack.get(j).getMessage().getMessage();
-				Note note = new Note((n[1] & 0xff),(n[2] & 0xff),(currentTrack.get(j).getTick()),(n[0] & 0xff));
-				notes.add(note);
-
-				// revove note so we dont read it more than once
-				currentTrack.remove(currentTrack.get(j));
-			}			
-		}
-		// Tell sequencer to stop recording
-		sequencer.stopRecording();
-
-		// Retrieve the sequence containing the stuff you played on the MIDI instrument
-		Sequence tmp = sequencer.getSequence();
-
-		// Save to file
-		try 
-		{
-			MidiSystem.write(tmp, 0, new File("MyMidiFile.mid"));
-		} 
-		catch (IOException e) 
-		{
-			System.out.println(e.getMessage());
-		}
-
-		System.out.println("done");
-
-		inputDevice.close();
-		sequencer.close();
-	}*/
 }

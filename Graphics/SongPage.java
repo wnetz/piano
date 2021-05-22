@@ -36,7 +36,7 @@ public class SongPage
 
         //update on resize
         ChangeListener<Number> resize = (observable,oldvalue,newvalue) -> {
-            songpage.setPrefHeight(height.get());
+            songpage.setPrefHeight(height.get()*9/10.0);
             songpage.setPrefWidth(width.get());
             this.update();
         };
@@ -60,6 +60,10 @@ public class SongPage
     {
         return width.get();
     }
+    public VBox getVbox() {
+        return songpage;
+    }
+    
     public void setHeight(double h)
     {
         height.set(h);
@@ -68,13 +72,15 @@ public class SongPage
     {
         width.set(w);
     }
-    public VBox getVbox() {
-        return songpage;
-    }
+    
     public void update()
     {
         keyboard.update();
         notesAnimation.update();
     }
     
+    public void play()
+    {
+        notesAnimation.play();
+    }
 }

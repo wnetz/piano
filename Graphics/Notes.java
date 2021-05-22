@@ -1,10 +1,13 @@
 package Graphics;
 
+import javafx.scene.paint.Color;
+
 public class Notes {
     private int dynamic, note, timeSignitureD, timeSignitureN;
     private double bps, duration, time;
+    private Color color;
 
-    public Notes(int dynamic, int note, int timeSignitureD, int timeSignitureN, double bps, double duration, double time )
+    public Notes(int dynamic, int note, int timeSignitureD, int timeSignitureN, double bps, double duration, double time, Color color)
     {
         this.timeSignitureD = timeSignitureD;
         this.note = note;
@@ -12,7 +15,8 @@ public class Notes {
         this.dynamic = dynamic;
         this.bps = bps;
         this.duration = duration;
-                this.time = time;
+        this.time = time;
+        this.color = color;
     }
     
     public int getDynamic()
@@ -43,7 +47,11 @@ public class Notes {
     {
         return time;
     }
-    
+    public Color getColor()
+    {
+        return color;
+    }
+
     public void addDuration(double duration)
     {
         this.duration += duration;

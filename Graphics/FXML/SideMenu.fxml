@@ -1,0 +1,19 @@
+
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="menu" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Graphics.Controller.SideMeunController">
+   <children>
+      <JFXButton fx:id="play" prefHeight="100.0" prefWidth="200.0" text="play" VBox.vgrow="ALWAYS" />
+      <JFXButton fx:id="slow" prefHeight="100.0" prefWidth="200.0" text="slow" VBox.vgrow="ALWAYS" />
+      <JFXButton fx:id="jump" prefHeight="100.0" prefWidth="200.0" text="jump" VBox.vgrow="ALWAYS" />
+      <HBox fx:id="leftRight" VBox.vgrow="ALWAYS">
+         <children>
+            <JFXButton fx:id="left" prefHeight="100.0" prefWidth="100.0" text="L" HBox.hgrow="ALWAYS" />
+            <JFXButton fx:id="right" prefHeight="100.0" prefWidth="100.0" text="R" HBox.hgrow="ALWAYS" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

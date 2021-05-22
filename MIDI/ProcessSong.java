@@ -8,13 +8,18 @@ import MIDI.Parsing.Note;
 import MIDI.Parsing.Song;
 import MIDI.Parsing.Tie;
 import MIDI.Parsing.Voice;
+import javafx.scene.paint.Color;
 
 public class ProcessSong
 {
     private int dynamic, timeSignitureD, timeSignitureN ;
     private double beat, tempo;
-    ArrayList<Notes> song;
-    ArrayList<ArrayList<Double>> toTie;
+    private ArrayList<Notes> song;
+    private ArrayList<ArrayList<Double>> toTie;
+    private final Color rightPrimaryColor = Color.CYAN;
+    private final Color rightSecondaryColor = Color.BLUE;
+    private final Color leftPrimaryColor = Color.GREENYELLOW;
+    private final Color leftsSecondaryColor = Color.GREEN;
 
     public ProcessSong(Song s)
     {
@@ -35,8 +40,8 @@ public class ProcessSong
 
     private void processSong(Song s)
     {
-        this.processHalf(s.getTop());
-        this.processHalf(s.getBottom());
+        this.processHalf(s.getTop(),rightPrimaryColor,rightSecondaryColor);
+        this.processHalf(s.getBottom(),leftPrimaryColor,leftsSecondaryColor);
         double size = song.get(song.size()-1).getTime() + song.get(song.size()-1).getDuration();
         for(int i = 0; i <= size; i++)
         {
@@ -56,12 +61,12 @@ public class ProcessSong
                 {
                     index++;
                 }
-                this.addNotes(new Note(0, 0, 0, 0), index, i, 0);
+                this.addNotes(new Note(0, 0, 0, 0), index, i, 0, Color.CRIMSON, Color.CRIMSON);
             }
         }
     }
     
-    private void processHalf(ArrayList<Measure> half)
+    private void processHalf(ArrayList<Measure> half, Color primary, Color secondary)
     {
         beat = 0;//track beat through entier song
         toTie = new ArrayList<ArrayList<Double>>();
@@ -90,7 +95,7 @@ public class ProcessSong
 
                     for(int l = 0; l < notes.size(); l++) //loop on notes
                     {
-                        this.addNotes(notes.get(l), index, voiceBeat, duration);//deals with notes and ties
+                        this.addNotes(notes.get(l), index, voiceBeat, duration, primary, secondary);//deals with notes and ties
                         index++;
                     }
                     voiceBeat += duration;
@@ -141,7 +146,7 @@ public class ProcessSong
         return duration*multiplier;
     }
     
-    private void addNotes(Note note, int index, double beat, double duration)
+    private void addNotes(Note note, int index, double beat, double duration, Color primary, Color secondary)
     {
         boolean from = false;
         boolean to = false;
@@ -187,7 +192,15 @@ public class ProcessSong
         }
         if(!from)//only add if note is start of a tie or does not tie
         {
-            song.add(index, new Notes(dynamic, note.getNote(), timeSignitureD, timeSignitureN, tempo, duration, beat));
+            if (note.getNote() % 12 == 1 || note.getNote() % 12 == 3 || note.getNote() % 12 == 6 || note.getNote() % 12 == 8 || note.getNote() % 12 == 10)
+            {
+                song.add(index, new Notes(dynamic, note.getNote(), timeSignitureD, timeSignitureN, tempo, duration, beat, secondary));
+            }
+            else
+            {
+                song.add(index, new Notes(dynamic, note.getNote(), timeSignitureD, timeSignitureN, tempo, duration, beat, primary));
+            }
+            
         }        
     }
 }

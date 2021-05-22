@@ -106,6 +106,8 @@ public class NotesAnimation
          
         Rectangle background = new Rectangle(0,0,width,height);
         background.setFill(Color.GRAY);
+        Rectangle top = new Rectangle(0,-1000,width,1000);
+        top.setFill(Color.WHITE);
         root.getChildren().add(background);        
 
         for(int i = 0; i < notes.size(); i++)//loop on notes in song
@@ -148,7 +150,7 @@ public class NotesAnimation
                 }
                 
                 Rectangle rect = new Rectangle(Piano.blackKeys[index].getX() * widthPerNote + widthPerNote * Piano.blackKeys[index].getMultiplier(), y - (notes.get(i).getDuration()*pxlsPerBeat), BlackKey.BLACK_KEY_WIDTH*widthPerNote, notes.get(i).getDuration()*pxlsPerBeat);
-                rect.setFill(BlackKey.SECODARY_COLOR);
+                rect.setFill(notes.get(i).getColor());
                 rect.setArcHeight((BlackKey.BLACK_KEY_WIDTH*widthPerNote)*(3/4.0));
                 rect.setArcWidth((BlackKey.BLACK_KEY_WIDTH*widthPerNote)*(3/4.0));
 
@@ -168,7 +170,7 @@ public class NotesAnimation
                 }
 
                 Rectangle rect = new Rectangle((index) * widthPerNote + BlackKey.BLACK_KEY_WIDTH/2*widthPerNote, y - (notes.get(i).getDuration()*pxlsPerBeat), (1-BlackKey.BLACK_KEY_WIDTH)*widthPerNote, notes.get(i).getDuration()*pxlsPerBeat);
-                rect.setFill(Key.SECODARY_COLOR);
+                rect.setFill(notes.get(i).getColor());
                 rect.setArcHeight(((1-BlackKey.BLACK_KEY_WIDTH)*widthPerNote)*(3/4.0));
                 rect.setArcWidth(((1-BlackKey.BLACK_KEY_WIDTH)*widthPerNote)*(3/4.0));
 
@@ -180,13 +182,21 @@ public class NotesAnimation
         {
             t.playFrom(time);
         });
+        root.getChildren().add(top);  
     }    
        
-    public void puse()
+    public void pause()
     {
         transitions.forEach((t) -> 
         {
             t.pause();;
+        });
+    }
+    public void play()
+    {
+        transitions.forEach((t) -> 
+        {
+            t.play();;
         });
     }
     

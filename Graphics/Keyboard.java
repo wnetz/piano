@@ -123,6 +123,9 @@ public class Keyboard
         double width = root.getPrefWidth() / 52.0;
 
         root.getChildren().clear();
+
+        Rectangle bottom = new Rectangle(0,height,root.getPrefWidth(),1000);
+        bottom.setFill(Color.WHITE);
         
         for (int i = 0; i < Piano.NATURAL; i++)//loop on whight notes paint before black keys
         {
@@ -139,6 +142,8 @@ public class Keyboard
             key.setFill(Piano.blackKeys[i].getColor());
             root.getChildren().add(key);   
         }
+
+        root.getChildren().add(bottom);
     }
     
     
