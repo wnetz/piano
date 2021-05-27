@@ -2,28 +2,52 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXSlider?>
+<?import com.jfoenix.controls.JFXToggleNode?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Point3D?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<StackPane fx:id="window" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Graphics.Controller.PracticeWindowController">
+<StackPane fx:id="window" stylesheets="Graphics/StyleSheets/PracticeWindowStyle.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Graphics.Controller.PracticeWindowController">
    <children>
       <VBox fx:id="songField" alignment="CENTER_LEFT" prefHeight="524.0" prefWidth="816.0" StackPane.alignment="CENTER" />
       <VBox fx:id="topBar" StackPane.alignment="TOP_LEFT">
          <children>
             <JFXSlider fx:id="time" />
             <Separator fx:id="songFieldSeparator" orientation="VERTICAL" prefHeight="490.0" prefWidth="0.0" />
-            <HBox fx:id="bottomBar" alignment="CENTER_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="0.0" prefWidth="816.0">
+            <HBox fx:id="bottomBar" alignment="BOTTOM_LEFT" nodeOrientation="LEFT_TO_RIGHT" prefHeight="0.0" prefWidth="816.0">
                <children>
-                  <JFXSlider fx:id="speed" prefWidth="129.0" />
-                  <Separator prefHeight="7.0" prefWidth="139.0" visible="false" />
-                  <JFXButton fx:id="play" />
-                  <Separator prefHeight="8.0" prefWidth="141.0" visible="false" />
-                  <JFXButton fx:id="left" alignment="CENTER" contentDisplay="CENTER" />
-                  <JFXButton fx:id="right" />
-                  <Separator prefHeight="11.0" prefWidth="7.0" visible="false" />
+                  <JFXSlider fx:id="speed" />
+                  <Separator fx:id="speedPlaySeparator" prefHeight="7.0" prefWidth="0" visible="false" />
+                  <JFXToggleNode fx:id="play">
+                     <graphic>
+                        <FontAwesomeIconView fx:id="playIcon" glyphName="PLAY_CIRCLE" />
+                     </graphic>
+                  </JFXToggleNode>
+                  <Separator fx:id="playLRSeparator" prefHeight="8.0" prefWidth="0" visible="false" />
+                  <JFXButton fx:id="left" alignment="CENTER" contentDisplay="RIGHT" textAlignment="RIGHT">
+                     <graphic>
+                        <ImageView fx:id="leftIcon" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                           <image>
+                              <Image url="@../../hand-paper-solid.png" />
+                           </image>
+                           <rotationAxis>
+                              <Point3D y="1.0" />
+                           </rotationAxis>
+                        </ImageView>
+                     </graphic></JFXButton>
+                  <JFXButton fx:id="right" alignment="CENTER">
+                     <graphic>
+                        <ImageView fx:id="rightIcon" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../hand-paper-solid.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></JFXButton>
                </children>
             </HBox>
          </children>

@@ -125,7 +125,7 @@ public class Keyboard
         root.getChildren().clear();
 
         Rectangle bottom = new Rectangle(0,height,root.getPrefWidth(),1000);
-        bottom.setFill(Color.WHITE);
+        bottom.setFill(Color.valueOf("fafa55"));
         
         for (int i = 0; i < Piano.NATURAL; i++)//loop on whight notes paint before black keys
         {

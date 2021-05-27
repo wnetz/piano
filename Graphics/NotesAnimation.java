@@ -1,14 +1,18 @@
 package Graphics;
 
 import Graphics.Piano.BlackKey;
-import Graphics.Piano.Key;
 import Graphics.Piano.Piano;
 import java.util.ArrayList;
+
+import com.jfoenix.controls.JFXSlider;
+
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -24,8 +28,9 @@ public class NotesAnimation
     private DoubleProperty height, width;  
     private Duration time; 
     private Pane root;
+    private JFXSlider tslider;
 
-    public NotesAnimation(ArrayList<Notes> notes) 
+    public NotesAnimation(ArrayList<Notes> notes, JFXSlider tslider) 
     {
         pxlsPerBeat = 0;
         this.notes = notes;
@@ -34,6 +39,7 @@ public class NotesAnimation
         width = new SimpleDoubleProperty(this,"width",0);
         time = new Duration(0);
         root = new Pane();
+        this.tslider = tslider;
 
         ChangeListener<Number> resize = (observable,oldvalue,newvalue) -> {
             root.setPrefHeight(height.get()*4/5.0);
@@ -73,6 +79,11 @@ public class NotesAnimation
     {
         return root;
     }
+    public ReadOnlyObjectProperty<Duration> getTimeProperty()
+    {
+        System.out.println(transitions.get(0).currentTimeProperty().getValue().toMinutes());
+        return transitions.get(0).currentTimeProperty();
+    }
 
     public void setHeight(double h)
     {
@@ -107,7 +118,7 @@ public class NotesAnimation
         Rectangle background = new Rectangle(0,0,width,height);
         background.setFill(Color.GRAY);
         Rectangle top = new Rectangle(0,-1000,width,1000);
-        top.setFill(Color.WHITE);
+        top.setFill(Color.valueOf("fafa55"));
         root.getChildren().add(background);        
 
         for(int i = 0; i < notes.size(); i++)//loop on notes in song
@@ -182,6 +193,18 @@ public class NotesAnimation
         {
             t.playFrom(time);
         });
+
+        ChangeListener<Duration> timeUpdate = new ChangeListener<Duration>()
+        {
+
+            @Override
+            public void changed(ObservableValue<? extends Duration> arg0, Duration oldvalue, Duration newvalue) 
+            {
+                tslider.setValue(newvalue.toMinutes());           
+            }
+        };
+        transitions.get(0).currentTimeProperty().addListener(timeUpdate);
+
         root.getChildren().add(top);  
     }    
        

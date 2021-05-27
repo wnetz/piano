@@ -2,10 +2,14 @@ package Graphics;
 
 import java.util.ArrayList;
 
+import com.jfoenix.controls.JFXSlider;
+
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 public class SongPage
 {
@@ -14,12 +18,14 @@ public class SongPage
     private NotesAnimation notesAnimation;
     private VBox songpage;
 
-    public SongPage(ArrayList<Notes> notes)
+    public static double PERCENT_HEIGHT = 9/10.0;
+
+    public SongPage(ArrayList<Notes> notes, JFXSlider time)
     {           
         height = new SimpleDoubleProperty(this,"height",0);
         width = new SimpleDoubleProperty(this,"width",0);
         keyboard = new Keyboard();
-        notesAnimation = new NotesAnimation(notes);
+        notesAnimation = new NotesAnimation(notes, time);
         songpage = new VBox();
 
         //auto adjust size
@@ -36,7 +42,7 @@ public class SongPage
 
         //update on resize
         ChangeListener<Number> resize = (observable,oldvalue,newvalue) -> {
-            songpage.setPrefHeight(height.get()*9/10.0);
+            songpage.setPrefHeight(height.get()*PERCENT_HEIGHT);
             songpage.setPrefWidth(width.get());
             this.update();
         };
@@ -63,7 +69,11 @@ public class SongPage
     public VBox getVbox() {
         return songpage;
     }
-    
+    public ReadOnlyObjectProperty<Duration> getTimeProperty()
+    {
+        return notesAnimation.getTimeProperty();
+    }
+
     public void setHeight(double h)
     {
         height.set(h);
@@ -82,5 +92,9 @@ public class SongPage
     public void play()
     {
         notesAnimation.play();
+    }
+    public void pause()
+    {
+        notesAnimation.pause();
     }
 }

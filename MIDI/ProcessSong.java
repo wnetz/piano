@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 public class ProcessSong
 {
     private int dynamic, timeSignitureD, timeSignitureN ;
-    private double beat, tempo;
+    private double beat, tempo, duration;
     private ArrayList<Notes> song;
     private ArrayList<ArrayList<Double>> toTie;
     private final Color rightPrimaryColor = Color.CYAN;
@@ -28,20 +28,25 @@ public class ProcessSong
         timeSignitureN = 0; 
         beat = 0;             
         tempo = 0;
+        duration = 0;
         song = new ArrayList<Notes>();
         toTie = new ArrayList<ArrayList<Double>>();
         
         this.processSong(s);
     }
     
-    public ArrayList<Notes> getSong() {
+    public double getDuration()
+    {
+        return duration;
+    }
+    public ArrayList<Notes> getSong() 
+    {
         return song;
     }
 
     private void processSong(Song s)
     {
-        this.processHalf(s.getTop(),rightPrimaryColor,rightSecondaryColor);
-        this.processHalf(s.getBottom(),leftPrimaryColor,leftsSecondaryColor);
+        duration = Math.max(this.processHalf(s.getTop(),rightPrimaryColor,rightSecondaryColor), this.processHalf(s.getBottom(),leftPrimaryColor,leftsSecondaryColor));
         double size = song.get(song.size()-1).getTime() + song.get(song.size()-1).getDuration();
         for(int i = 0; i <= size; i++)
         {
@@ -66,8 +71,9 @@ public class ProcessSong
         }
     }
     
-    private void processHalf(ArrayList<Measure> half, Color primary, Color secondary)
+    private double processHalf(ArrayList<Measure> half, Color primary, Color secondary)
     {
+        double time = 0;
         beat = 0;//track beat through entier song
         toTie = new ArrayList<ArrayList<Double>>();
 
@@ -101,8 +107,10 @@ public class ProcessSong
                     voiceBeat += duration;
                 }
             }
+            time += timeSignitureN/(tempo*60);
             beat += timeSignitureN;//add a measurs worth of beats
         }
+        return time;
     }
     
     private void updateValues(Voice voice)
