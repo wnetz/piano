@@ -69,6 +69,10 @@ public class SongPage
     public VBox getVbox() {
         return songpage;
     }
+    public NotesAnimation getAnimation()
+    {
+        return notesAnimation;
+    }
     public ReadOnlyObjectProperty<Duration> getTimeProperty()
     {
         return notesAnimation.getTimeProperty();

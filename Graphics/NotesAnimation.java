@@ -29,6 +29,7 @@ public class NotesAnimation
     private Duration time; 
     private Pane root;
     private JFXSlider tslider;
+    private boolean pause;
 
     public NotesAnimation(ArrayList<Notes> notes, JFXSlider tslider) 
     {
@@ -39,6 +40,7 @@ public class NotesAnimation
         width = new SimpleDoubleProperty(this,"width",0);
         time = new Duration(0);
         root = new Pane();
+        pause = false;
         this.tslider = tslider;
 
         ChangeListener<Number> resize = (observable,oldvalue,newvalue) -> {
@@ -84,6 +86,10 @@ public class NotesAnimation
         System.out.println(transitions.get(0).currentTimeProperty().getValue().toMinutes());
         return transitions.get(0).currentTimeProperty();
     }
+    public boolean getPause()
+    {
+        return pause;
+    }
 
     public void setHeight(double h)
     {
@@ -97,7 +103,7 @@ public class NotesAnimation
     {      
         time = t;       
     }
-
+    
     public void update() 
     {
         double height = root.getPrefHeight();
@@ -106,8 +112,10 @@ public class NotesAnimation
         double width = root.getPrefWidth();
         double widthPerNote = root.getPrefWidth()/52;
         double y; 
-
-        time = this.getTime();
+        if(!pause)
+        {
+            time = this.getTime();
+        }
         transitions.forEach(t ->
         {
             t.stop();
@@ -200,16 +208,25 @@ public class NotesAnimation
             @Override
             public void changed(ObservableValue<? extends Duration> arg0, Duration oldvalue, Duration newvalue) 
             {
-                tslider.setValue(newvalue.toMinutes());           
+                if(!pause)
+                {
+                    tslider.setValue(newvalue.toMinutes()); 
+                }          
             }
         };
         transitions.get(0).currentTimeProperty().addListener(timeUpdate);
+
+        if(pause)
+        {
+            //this.pause();
+        }
 
         root.getChildren().add(top);  
     }    
        
     public void pause()
     {
+        pause = true;
         transitions.forEach((t) -> 
         {
             t.pause();;
@@ -217,6 +234,7 @@ public class NotesAnimation
     }
     public void play()
     {
+        pause = false;
         transitions.forEach((t) -> 
         {
             t.play();;

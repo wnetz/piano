@@ -16,10 +16,10 @@ public class ProcessSong
     private double beat, tempo, duration;
     private ArrayList<Notes> song;
     private ArrayList<ArrayList<Double>> toTie;
-    private final Color rightPrimaryColor = Color.CYAN;
-    private final Color rightSecondaryColor = Color.BLUE;
-    private final Color leftPrimaryColor = Color.GREENYELLOW;
-    private final Color leftsSecondaryColor = Color.GREEN;
+    private final Color rightPrimaryColor = Color.web("0x0ff");
+    private final Color rightSecondaryColor = Color.web("0x00F");
+    private final Color leftPrimaryColor = Color.web("0x0F0");
+    private final Color leftsSecondaryColor = Color.web("0x52c152");
 
     public ProcessSong(Song s)
     {

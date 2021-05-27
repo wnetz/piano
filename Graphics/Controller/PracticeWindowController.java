@@ -7,6 +7,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXSlider;
 import com.jfoenix.controls.JFXToggleNode;
 
+import Graphics.NotesAnimation;
 import Graphics.SongPage;
 import MIDI.ProcessSong;
 import MIDI.Parsing.Parser;
@@ -15,10 +16,12 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Separator;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -60,6 +63,7 @@ public class PracticeWindowController implements Initializable
     private double duration;
     private Song song;
     private SongPage songPage;
+    private NotesAnimation notesAnimation;
 
     public PracticeWindowController()
     {
@@ -76,7 +80,8 @@ public class PracticeWindowController implements Initializable
         ProcessSong ps = new ProcessSong(song); 
         duration = ps.getDuration();
         songPage = new SongPage(ps.getSong(),time);
-        songPage.update();        
+        songPage.update();  
+        notesAnimation = songPage.getAnimation();      
 
         ChangeListener<Number> resize = (observable,oldvalue,newvalue) ->  
         {
@@ -112,15 +117,24 @@ public class PracticeWindowController implements Initializable
         };
         ChangeListener<Boolean> playPause = (observable,oldvalue,newvalue) -> 
         {
+            
             if(newvalue)
             {
                 playIcon.setGlyphName("PAUSE_CIRCLE");
-                songPage.pause();
+                notesAnimation.pause();                
             }
             else
             {
                 playIcon.setGlyphName("PLAY_CIRCLE");
-                songPage.play();
+                notesAnimation.play();
+            }
+        };
+        ChangeListener<Number> timeChange = (observable,oldvalue,newvalue) -> 
+        {
+            if(notesAnimation.getPause())
+            {
+                notesAnimation.setTime(new Duration(time.getValue()*60000));
+                notesAnimation.update();
             }
         };
         
@@ -133,6 +147,26 @@ public class PracticeWindowController implements Initializable
         time.setShowTickMarks(true);
         time.setMajorTickUnit(duration/song.getTop().size());
         time.setMinorTickCount(0);
+        time.setOnMousePressed(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent arg0) {
+                playIcon.setGlyphName("PAUSE_CIRCLE");
+                songPage.pause();            
+            }            
+        });
+        time.setOnMouseReleased(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent arg0) {
+                playIcon.setGlyphName("PLAY_CIRCLE");
+                notesAnimation.setTime(new Duration(time.getValue()*60000));
+                System.out.println(time.getValue()); 
+                notesAnimation.update();
+                notesAnimation.play();
+            }
+        });
+        time.valueProperty().addListener(timeChange);
 
         playIcon.prefHeight(play.getPrefHeight());   
         playIcon.prefWidth(play.getPrefHeight());     
