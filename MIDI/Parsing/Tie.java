@@ -1,23 +1,26 @@
 package MIDI.Parsing;
 
-public class Tie {
-    private int measures;
+public class Tie 
+{
     private double  fraction;
+    private int measures;
 
-    public Tie(int measures, double  fraction)
+    public double getFraction()
     {
-        this.measures = measures;
-        this.fraction = fraction;
+        //System.out.println("Tie: getFraction");
+        return fraction;
     }
     public int getMeasures()
     {
+        //System.out.println("Tie: getMeasures");
         return measures;
     }
-    public double getFraction()
+    public Tie(int measures, double  fraction)
     {
-        return fraction;
+        //System.out.println("Tie");
+        this.measures = measures;
+        this.fraction = fraction;
     }
-    
     @Override
     public String toString() 
     {

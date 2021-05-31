@@ -1,11 +1,9 @@
 package Graphics;
 
+import com.jfoenix.controls.JFXSlider;
 import Graphics.Piano.BlackKey;
 import Graphics.Piano.Piano;
 import java.util.ArrayList;
-
-import com.jfoenix.controls.JFXSlider;
-
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.DoubleProperty;
@@ -21,18 +19,53 @@ import javafx.util.Duration;
 
 public class NotesAnimation 
 {    
-    private final double  MEASURES_ON_SCREEN = 2;    
-    private double pxlsPerBeat;//pxls per beat
     private ArrayList<Notes> notes; 
     private ArrayList<TranslateTransition> transitions; 
+    private boolean pause;  
+    private double pxlsPerBeat;
     private DoubleProperty height, width;  
-    private Duration time; 
+    private Duration time;
+    private final double  MEASURES_ON_SCREEN = 2;
+    private JFXSlider tslider;  
     private Pane root;
-    private JFXSlider tslider;
-    private boolean pause;
 
+    public boolean getPause()
+    {
+        //System.out.println("NotesAnimation: getPause");
+        return pause;
+    }
+    public double getHeight()
+    {
+        System.out.println("NotesAnimation: getHeight");
+        return height.get();
+    }
+    public double getWidth()
+    {
+        System.out.println("NotesAnimation: getHeight");
+        return width.get();
+    }
+    public DoubleProperty getHeightProperty()
+    {
+        System.out.println("NotesAnimation: GetHeightProperty");
+        return height;
+    }
+    public DoubleProperty getWidthProperty()
+    {
+        System.out.println("NotesAnimation: GetHeightProperty");
+        return width;
+    }
+    public Duration getTime()
+    {
+        
+        if(transitions.size() == 0)
+        {
+            return time;
+        }
+        return transitions.get(0).getCurrentTime();
+    }
     public NotesAnimation(ArrayList<Notes> notes, JFXSlider tslider) 
     {
+        System.out.println("NotesAnimation");
         pxlsPerBeat = 0;
         this.notes = notes;
         transitions = new ArrayList<TranslateTransition>();
@@ -44,75 +77,52 @@ public class NotesAnimation
         this.tslider = tslider;
 
         ChangeListener<Number> resize = (observable,oldvalue,newvalue) -> {
+            System.out.println("NotesAnimation: resize>");
             root.setPrefHeight(height.get()*4/5.0);
             root.setPrefWidth(width.get());
             this.update();
+            System.out.println("NotesAnimation: resize<");
         };
 
         height.addListener(resize);
-        width.addListener(resize);         
-    }
-    
-    public DoubleProperty heightProperty()
-    {
-        return height;
-    }
-    public DoubleProperty widthProperty()
-    {
-        return width;
-    }
-    public double getHeight()
-    {
-        return height.get();
-    }
-    public double getWidth()
-    {
-        return width.get();
-    }
-    public Duration getTime()
-    {
-        if(transitions.size() == 0)
-        {
-            return time;
-        }
-        return transitions.get(0).getCurrentTime();
+        width.addListener(resize);        
     }
     public Pane getPane()
     {
+        System.out.println("NotesAnimation: getPane");
         return root;
     }
     public ReadOnlyObjectProperty<Duration> getTimeProperty()
     {
-        System.out.println(transitions.get(0).currentTimeProperty().getValue().toMinutes());
+        System.out.println("NotesAnimation: getTimeProperty");
         return transitions.get(0).currentTimeProperty();
     }
-    public boolean getPause()
-    {
-        return pause;
-    }
-
     public void setHeight(double h)
     {
+        System.out.println("NotesAnimation: setHeight");
         height.set(h);
-    }
-    public void setWidth(double w)
-    {
-        width.set(w);
     }
     public void setTime(Duration t)//moves notes
     {      
+        System.out.println("NotesAnimation: setHeight");
         time = t;       
     }
-    
+    public void setWidth(double w)
+    {
+        System.out.println("NotesAnimation: setHeight");
+        width.set(w);
+    }
     public void update() 
     {
+        System.out.println("NotesAnimation: update>");
+
         double height = root.getPrefHeight();
         double pxPerSec;
         double toY = (notes.get(notes.size()-1).getTime()) * height/(notes.get(notes.size()-1).getTimeSignitureN()*MEASURES_ON_SCREEN);
         double width = root.getPrefWidth();
         double widthPerNote = root.getPrefWidth()/52;
         double y; 
-        if(!pause)
+        if(!pause)//update time if not paused
         {
             time = this.getTime();
         }
@@ -124,9 +134,7 @@ public class NotesAnimation
         
          
         Rectangle background = new Rectangle(0,0,width,height);
-        background.setFill(Color.GRAY);
-        Rectangle top = new Rectangle(0,-1000,width,1000);
-        top.setFill(Color.valueOf("fafa55"));
+        background.setFill(Color.GRAY);        
         root.getChildren().add(background);        
 
         for(int i = 0; i < notes.size(); i++)//loop on notes in song
@@ -143,7 +151,7 @@ public class NotesAnimation
             trans.setToY(toY + height);
             trans.setInterpolator(Interpolator.LINEAR);
 
-            if(notes.get(i).getTime()%notes.get(i).getTimeSignitureN() == 0)
+            if(notes.get(i).getTime()%notes.get(i).getTimeSignitureN() == 0)//draw measure lines
             {
                 Line measureLine = new Line(0, y, width, y);
                 measureLine.setFill(Color.DARKGRAY);                                
@@ -161,7 +169,7 @@ public class NotesAnimation
                 int index = 0;
                 for(int j = 0; j < Piano.SHARP_FLAT; j++)//find index of note in black keys in order to paint it
                 {
-                    if(Piano.BLACKKEYS[j] == note)
+                    if(Piano.BLACK_KEYS[j] == note)
                     {
                         index = j;
                         j = Piano.SHARP_FLAT;
@@ -181,7 +189,7 @@ public class NotesAnimation
                 int index = 0;
                 for(int j = 0; j < Piano.NATURAL; j++)//find index of note in whight keys in order to paint it
                 {
-                    if(Piano.WHIGHTKEYS[j] == note)
+                    if(Piano.WHIGHT_KEYS[j] == note)
                     {
                         index = j;
                         j = Piano.NATURAL;
@@ -204,14 +212,15 @@ public class NotesAnimation
 
         ChangeListener<Duration> timeUpdate = new ChangeListener<Duration>()
         {
-
             @Override
             public void changed(ObservableValue<? extends Duration> arg0, Duration oldvalue, Duration newvalue) 
             {
+                //System.out.println("NotesAnimation: update: timeUpdate>");
                 if(!pause)
                 {
                     tslider.setValue(newvalue.toMinutes()); 
-                }          
+                }   
+                //System.out.println("NotesAnimation: update: timeUpdate<");       
             }
         };
         transitions.get(0).currentTimeProperty().addListener(timeUpdate);
@@ -221,9 +230,12 @@ public class NotesAnimation
             //this.pause();
         }
 
-        root.getChildren().add(top);  
+        Rectangle top = new Rectangle(0,-1000,width,1000);
+        top.setFill(Color.valueOf("fafa55"));//temporary color
+        root.getChildren().add(top); 
+
+        System.out.println("NotesAnimation: update<");
     }    
-       
     public void pause()
     {
         pause = true;

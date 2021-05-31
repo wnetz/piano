@@ -2,7 +2,8 @@ package MIDI;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-
+import javafx.concurrent.ScheduledService;
+import javafx.concurrent.Task;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
@@ -13,24 +14,29 @@ import javax.sound.midi.Sequencer;
 import javax.sound.midi.Track;
 import javax.sound.midi.Transmitter;
 import MIDI.Parsing.Note;
-import javafx.concurrent.ScheduledService;
-import javafx.concurrent.Task;
 
 public class MIDI extends ScheduledService<ArrayList<Note>> 
 {	
+	private ArrayList<Note> notes;
 	private boolean get;				//track state
 	private int device;					//-----------------------------cheat for now---------------------------------------
-	private ArrayList<Note> notes;
 	private MidiDevice inputDevice;
 	private Receiver receiver;
 	private Sequence seq;
 	private Sequencer sequencer;
+	private Task<ArrayList<Note>> t;
 	private Track currentTrack;
 	private Transmitter transmitter;
-	private Task<ArrayList<Note>> t;
 
+	public ArrayList<Note> getNotes() 
+	{
+		System.out.println("MIDI: getNotes");
+		get = true;//request to get notes	
+		return notes;		
+	}
 	public MIDI() 
 	{
+		System.out.println("MIDI");
 		get = false;
 		device = 5;
 		notes = new ArrayList<Note>();
@@ -103,10 +109,10 @@ public class MIDI extends ScheduledService<ArrayList<Note>>
 		// start recording
 		sequencer.startRecording();
 	}
-
 	@Override
 	protected Task<ArrayList<Note>> createTask()
-	{		
+	{	
+		System.out.println("MIDI: createTask");	
 		//System.out.println("new");
 		t = new GetMIDI(currentTrack);
 		t.run();
@@ -129,14 +135,9 @@ public class MIDI extends ScheduledService<ArrayList<Note>>
 		
 		return t;
 	}
-	
-	public ArrayList<Note> getNotes() 
-	{
-		get = true;//request to get notes	
-		return notes;		
-	}
 	public void done()
 	{
+		System.out.println("MIDI: done");	
 		get = false;
 		notes.clear();
 	}

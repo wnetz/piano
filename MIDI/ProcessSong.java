@@ -1,78 +1,51 @@
 package MIDI;
 
 import Graphics.Notes;
-import java.util.ArrayList;
 import MIDI.Parsing.Chord;
 import MIDI.Parsing.Measure;
 import MIDI.Parsing.Note;
 import MIDI.Parsing.Song;
 import MIDI.Parsing.Tie;
 import MIDI.Parsing.Voice;
+import java.util.ArrayList;
 import javafx.scene.paint.Color;
 
 public class ProcessSong
 {
-    private int dynamic, timeSignitureD, timeSignitureN ;
-    private double beat, tempo, duration;
     private ArrayList<Notes> song;
     private ArrayList<ArrayList<Double>> toTie;
-    private final Color rightPrimaryColor = Color.web("0x0ff");
-    private final Color rightSecondaryColor = Color.web("0x00F");
-    private final Color leftPrimaryColor = Color.web("0x0F0");
-    private final Color leftsSecondaryColor = Color.web("0x52c152");
+    private double beat, duration, tempo;
+    private final Color LEFT_PRIMARY_COLOR = Color.web("0x0F0");
+    private final Color LEFT_SECONDARY_COLOR = Color.web("0x52c152");
+    private final Color RIGHT_PRIMARY_COLOR = Color.web("0x0ff");
+    private final Color RIGHT_SECONDARY_COLOR = Color.web("0x00F");
+    private int dynamic, timeSignitureD, timeSignitureN ;
 
-    public ProcessSong(Song s)
+    private double dotLength(double duration,int dots)
     {
-        dynamic = 0; 
-        timeSignitureD = 0; 
-        timeSignitureN = 0; 
-        beat = 0;             
-        tempo = 0;
-        duration = 0;
-        song = new ArrayList<Notes>();
-        toTie = new ArrayList<ArrayList<Double>>();
-        
-        this.processSong(s);
-    }
-    
-    public double getDuration()
-    {
-        return duration;
-    }
-    public ArrayList<Notes> getSong() 
-    {
-        return song;
-    }
+        //System.out.println("ProcessSong: dotLength>");
+        int dot = 1;
+        double multiplier;
 
-    private void processSong(Song s)
-    {
-        duration = Math.max(this.processHalf(s.getTop(),rightPrimaryColor,rightSecondaryColor), this.processHalf(s.getBottom(),leftPrimaryColor,leftsSecondaryColor));
-        double size = song.get(song.size()-1).getTime() + song.get(song.size()-1).getDuration();
-        for(int i = 0; i <= size; i++)
+        if(dots != 0)
         {
-            boolean in = false;
-            for(int j = 0; j < song.size();j++)
+            multiplier = .5;
+            while(dot != dots)
             {
-                if(song.get(j).getTime() == i)
-                {
-                    in = true;
-                    j = song.size();
-                }
-            }
-            if(!in)
-            {
-                int index = 0;
-                while(index != song.size() && i > song.get(index).getTime())//finds notes position in song
-                {
-                    index++;
-                }
-                this.addNotes(new Note(0, 0, 0, 0), index, i, 0, Color.CRIMSON, Color.CRIMSON);
+                multiplier += Math.pow(.5, dot);
+                dot++;
             }
         }
+        else
+        {
+            multiplier = 0;
+        }
+        //System.out.println("ProcessSong: dotLength<");
+        return duration*multiplier;
     }
-    
     private double processHalf(ArrayList<Measure> half, Color primary, Color secondary)
     {
+        //System.out.println("ProcessSong: processHalf>");
         double time = 0;
         beat = 0;//track beat through entier song
         toTie = new ArrayList<ArrayList<Double>>();
@@ -110,52 +83,12 @@ public class ProcessSong
             time += timeSignitureN/(tempo*60);
             beat += timeSignitureN;//add a measurs worth of beats
         }
+        //System.out.println("ProcessSong: processHalf<");
         return time;
     }
-    
-    private void updateValues(Voice voice)
-    {
-        int [] timeSig = voice.getTimeSigniture();
-
-        if(timeSig[0] != 0 && timeSig[1] != 0)
-        {
-            timeSignitureN = timeSig[0];
-            timeSignitureD = timeSig[1];
-        }
-        if(voice.getDynamic() != 0)
-        {
-            dynamic = voice.getDynamic();
-        }
-        if(voice.getTempo() != 0)
-        {
-            tempo = Math.round(voice.getTempo()*60);
-            tempo = tempo/60.0;
-            System.out.println(tempo + " " + tempo*60);
-        }
-    }
-    private double dotLength(double duration,int dots)
-    {
-        int dot = 1;
-        double multiplier;
-
-        if(dots != 0)
-        {
-            multiplier = .5;
-            while(dot != dots)
-            {
-                multiplier += Math.pow(.5, dot);
-                dot++;
-            }
-        }
-        else
-        {
-            multiplier = 0;
-        }
-        return duration*multiplier;
-    }
-    
     private void addNotes(Note note, int index, double beat, double duration, Color primary, Color secondary)
     {
+        //System.out.println("ProcessSong: addNotes>");
         boolean from = false;
         boolean to = false;
         int remove = 0;
@@ -209,6 +142,83 @@ public class ProcessSong
                 song.add(index, new Notes(dynamic, note.getNote(), timeSignitureD, timeSignitureN, tempo, duration, beat, primary));
             }
             
-        }        
+        } 
+        //System.out.println("ProcessSong: addNotes<");       
+    }
+    private void process(Song s)
+    {
+        //System.out.println("ProcessSong: process>");
+        duration = Math.max(this.processHalf(s.getTop(),RIGHT_PRIMARY_COLOR,RIGHT_SECONDARY_COLOR), this.processHalf(s.getBottom(),LEFT_PRIMARY_COLOR,LEFT_SECONDARY_COLOR));
+        double size = song.get(song.size()-1).getTime() + song.get(song.size()-1).getDuration();
+
+        for(int i = 0; i <= size; i++)
+        {
+            boolean in = false;
+            for(int j = 0; j < song.size();j++)
+            {
+                if(song.get(j).getTime() == i)
+                {
+                    in = true;
+                    j = song.size();
+                }
+            }
+            if(!in)
+            {
+                int index = 0;
+                while(index != song.size() && i > song.get(index).getTime())//finds notes position in song
+                {
+                    index++;
+                }
+                this.addNotes(new Note(0, 0, 0, 0), index, i, 0, Color.CRIMSON, Color.CRIMSON);
+            }
+        }
+        //System.out.println("ProcessSong: process<");
+    }
+    private void updateValues(Voice voice)
+    {
+        //System.out.println("ProcessSong: updateValues>");
+        int [] timeSig = voice.getTimeSigniture();
+
+        if(timeSig[0] != 0 && timeSig[1] != 0)
+        {
+            timeSignitureN = timeSig[0];
+            timeSignitureD = timeSig[1];
+        }
+        if(voice.getDynamic() != 0)
+        {
+            dynamic = voice.getDynamic();
+        }
+        if(voice.getTempo() != 0)
+        {
+            tempo = Math.round(voice.getTempo()*60);
+            tempo = tempo/60.0;
+            //System.out.println(tempo + " " + tempo*60);
+        }
+        //System.out.println("ProcessSong: updateValues<");
+    }
+    public ArrayList<Notes> getSong() 
+    {
+        System.out.println("ProcessSong: getSong");
+        return song;
+    }
+    public double getDuration()
+    {
+        System.out.println("ProcessSong: getDuration>");
+        return duration;
+    }
+    public ProcessSong(Song s)
+    {
+        System.out.println("ProcessSong>");
+        dynamic = 0; 
+        timeSignitureD = 0; 
+        timeSignitureN = 0; 
+        beat = 0;             
+        tempo = 0;
+        duration = 0;
+        song = new ArrayList<Notes>();
+        toTie = new ArrayList<ArrayList<Double>>();
+        
+        this.process(s);
+        System.out.println("ProcessSong<");
     }
 }

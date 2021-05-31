@@ -4,31 +4,22 @@ import javafx.scene.paint.Color;
 
 public class Key 
 {
-    public static final Color PRIMARY_COLOR = Color.WHITE, SECODARY_COLOR = Color.CYAN;
-    protected int index, midiValue;
     protected Color color;
+    protected int index, midiValue;
+    private static final Color PRIMARY_COLOR = Color.WHITE; 
+    private static final Color SECONDARY_COLOR = Color.CYAN;    
 
-    public Key(int index, int midiValue) 
+    public Color getColor() 
     {
-        this.index = index;
-        this.midiValue = midiValue;
-        color = PRIMARY_COLOR;
+        //System.out.println("Key: getColor");
+        return this.color;
     }
-    
-    public int getIndex() 
-    {
-        return index;
-    }
-    public int getMidiValue() 
-    {
-        return midiValue;
-    }
-    
     public Color pressed(boolean pressed) 
     {
+        System.out.println("Key: pressed");
         if (pressed) 
         {
-            this.color = SECODARY_COLOR;
+            this.color = SECONDARY_COLOR;
         } 
         else 
         {
@@ -36,11 +27,23 @@ public class Key
         }
         return this.color;
     }
-    public Color getColor() 
+    public int getIndex() 
     {
-        return this.color;
+        System.out.println("Key: getIndex");
+        return index;
     }
-
+    public int getMidiValue() 
+    {
+        System.out.println("Key: getMidiValue");
+        return midiValue;
+    }    
+    public Key(int index, int midiValue) 
+    {
+        //System.out.println("Key");
+        this.index = index;
+        this.midiValue = midiValue;
+        color = PRIMARY_COLOR;
+    } 
     @Override
     public String toString()
     {

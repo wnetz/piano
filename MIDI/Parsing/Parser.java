@@ -10,131 +10,6 @@ public class Parser {
     private Song song;
     private String in;
 
-    public Parser()
-    {
-        song = new Song();
-    }
-    
-    public Song parse(String name)
-    {
-        song.clear();//reset song
-        try
-        {
-            file = new Scanner(new File(name));
-            do
-            {
-                in = file.nextLine();
-            }while(in.indexOf("</Part>") == -1);//skip beginig
-            this.parseStaff(song.getTop());
-            this.parseStaff(song.getBottom());
-        }
-        catch(FileNotFoundException e)
-        {
-            System.out.println("could not find file " + name);
-        }     
-        return song;
-    }
-    
-    private void parseStaff(ArrayList<Measure> staff)
-    {
-        do
-        {
-            in = file.nextLine();           
-            if(in.indexOf("<Measure>") != -1)
-            {
-                staff.add(this.parseMeasure());
-            }
-        }while(in.indexOf("</Staff>") == -1);
-        
-        
-    }
-    
-    private Measure parseMeasure()
-    {
-        Measure measure = new Measure();
-        do
-        {
-            in = file.nextLine();
-            if(in.indexOf("<voice>") != -1)
-            {
-                measure.addVoice(this.parseVoice());
-            }
-        }while(in.indexOf("</Measure>") == -1);
-        return measure;
-    }
-    
-    private Voice parseVoice()
-    {
-        Voice voice = new Voice();
-        do
-        {
-            in = file.nextLine();
-            if(in.indexOf("<TimeSig>") != -1)
-            {
-                voice.setTimeSigniture(this.parseTimeSigniture());
-            }
-            else if(in.indexOf("<Dynamic>") != -1)
-            {
-                voice.setDynamic(this.parseDynamic());
-            }
-            else if(in.indexOf("<Tempo>") != -1)
-            {
-                voice.setTempo(this.parseTempo());
-            }
-            else if(in.indexOf("<Chord>") != -1)
-            {
-                voice.addChord(this.parseChord());
-            }
-            else if(in.indexOf("<Rest>") != -1)
-            {
-                voice.addChord(this.parseRest());
-            }
-        }while(in.indexOf("</voice>") == -1);       
-        return voice;
-    }
-    
-    private int[] parseTimeSigniture()
-    {
-        int [] timeSigniture = new int[2];
-
-        in = file.nextLine();        
-        timeSigniture[0] = Integer.parseInt(in.substring(in.indexOf(">")+1,in.indexOf("</sigN>")));  
-        
-        in = file.nextLine();        
-        timeSigniture[1] = Integer.parseInt(in.substring(in.indexOf(">")+1,in.indexOf("</sigD>"))); 
-        do
-        {
-            in = file.nextLine();
-        }while(in.indexOf("</TimeSig>") == -1);     
-        return timeSigniture;
-    }
-    private int parseDynamic()
-    {
-        do
-        {
-            in = file.nextLine();
-        }while(in.indexOf("<velocity>") == -1);
-        int dynamic = Integer.parseInt(in.substring(in.indexOf(">")+1,in.indexOf("</velocity>")));
-        do
-        {
-            in = file.nextLine();
-        }while(in.indexOf("</Dynamic>") == -1);        
-        return dynamic;
-    }
-    private double parseTempo()
-    {
-        do
-        {
-            in = file.nextLine();
-        }while(in.indexOf("<tempo>") == -1);
-        double tempo = Double.parseDouble(in.substring(in.indexOf(">")+1,in.indexOf("</tempo>")));
-        do
-        {
-            in = file.nextLine();
-        }while(in.indexOf("</Tempo>") == -1);
-        return tempo;
-    }
-    
     private Chord parseChord()
     {
         Chord chord = new Chord();
@@ -215,7 +90,60 @@ public class Parser {
         }while(in.indexOf("</Rest>") == -1);
         return rest;
     }
-    
+    private double parseTempo()
+    {
+        do
+        {
+            in = file.nextLine();
+        }while(in.indexOf("<tempo>") == -1);
+        double tempo = Double.parseDouble(in.substring(in.indexOf(">")+1,in.indexOf("</tempo>")));
+        do
+        {
+            in = file.nextLine();
+        }while(in.indexOf("</Tempo>") == -1);
+        return tempo;
+    }
+    private int parseDynamic()
+    {
+        do
+        {
+            in = file.nextLine();
+        }while(in.indexOf("<velocity>") == -1);
+        int dynamic = Integer.parseInt(in.substring(in.indexOf(">")+1,in.indexOf("</velocity>")));
+        do
+        {
+            in = file.nextLine();
+        }while(in.indexOf("</Dynamic>") == -1);        
+        return dynamic;
+    }
+    private int[] parseTimeSigniture()
+    {
+        int [] timeSigniture = new int[2];
+
+        in = file.nextLine();        
+        timeSigniture[0] = Integer.parseInt(in.substring(in.indexOf(">")+1,in.indexOf("</sigN>")));  
+        
+        in = file.nextLine();        
+        timeSigniture[1] = Integer.parseInt(in.substring(in.indexOf(">")+1,in.indexOf("</sigD>"))); 
+        do
+        {
+            in = file.nextLine();
+        }while(in.indexOf("</TimeSig>") == -1);     
+        return timeSigniture;
+    }
+    private Measure parseMeasure()
+    {
+        Measure measure = new Measure();
+        do
+        {
+            in = file.nextLine();
+            if(in.indexOf("<voice>") != -1)
+            {
+                measure.addVoice(this.parseVoice());
+            }
+        }while(in.indexOf("</Measure>") == -1);
+        return measure;
+    }
     private Note parseNote()
     {
         Note note = new Note();
@@ -233,7 +161,32 @@ public class Parser {
         }while(in.indexOf("</Note>") == -1);
         return note;
     }
-    
+    public Parser()
+    {
+        System.out.println("Parser");
+        song = new Song();
+    }
+    public Song parse(String name)
+    {        
+        System.out.println("Parser: parse>");
+        song.clear();//reset song
+        try
+        {
+            file = new Scanner(new File(name));
+            do
+            {
+                in = file.nextLine();
+            }while(in.indexOf("</Part>") == -1);//skip beginig
+            this.parseStaff(song.getTop());
+            this.parseStaff(song.getBottom());
+        }
+        catch(FileNotFoundException e)
+        {
+            System.out.println("could not find file " + name);
+        }     
+        System.out.println("Parser: parse<");
+        return song;
+    }
     private Tie parseTie()
     {
         int measure = 0;
@@ -253,5 +206,47 @@ public class Parser {
             }
         }while(in.indexOf("</next>") == -1 && in.indexOf("</prev>") == -1);
         return new Tie(measure,fraction);
+    }
+    private void parseStaff(ArrayList<Measure> staff)
+    {
+        do
+        {
+            in = file.nextLine();           
+            if(in.indexOf("<Measure>") != -1)
+            {
+                staff.add(this.parseMeasure());
+            }
+        }while(in.indexOf("</Staff>") == -1);
+        
+        
+    }
+    private Voice parseVoice()
+    {
+        Voice voice = new Voice();
+        do
+        {
+            in = file.nextLine();
+            if(in.indexOf("<TimeSig>") != -1)
+            {
+                voice.setTimeSigniture(this.parseTimeSigniture());
+            }
+            else if(in.indexOf("<Dynamic>") != -1)
+            {
+                voice.setDynamic(this.parseDynamic());
+            }
+            else if(in.indexOf("<Tempo>") != -1)
+            {
+                voice.setTempo(this.parseTempo());
+            }
+            else if(in.indexOf("<Chord>") != -1)
+            {
+                voice.addChord(this.parseChord());
+            }
+            else if(in.indexOf("<Rest>") != -1)
+            {
+                voice.addChord(this.parseRest());
+            }
+        }while(in.indexOf("</voice>") == -1);       
+        return voice;
     }
 }

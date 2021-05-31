@@ -21,8 +21,29 @@ public class Keyboard
     private DoubleProperty height, width;
     private Pane root;
 
+    public DoubleProperty getHeightProperty()
+    {
+        System.out.println("Keyboard: heightProperty");
+        return height;
+    }
+    public DoubleProperty getWidthProperty()
+    {
+        System.out.println("Keyboard: widthProperty");
+        return width;
+    }
+    public double getHeight()
+    {
+        System.out.println("Keyboard: getHeight");
+        return height.get();
+    }
+    public double getWidth()
+    {
+        System.out.println("Keyboard: getWidth");
+        return width.get();
+    }
     public Keyboard() 
     {        
+        System.out.println("Keyboard");
         height = new SimpleDoubleProperty(this,"height",0);
         width = new SimpleDoubleProperty(this,"width",0);
         root = new Pane();
@@ -36,6 +57,7 @@ public class Keyboard
 
         ChangeListener<Boolean> run = (observable,oldvalue,newvalue) -> 
         {
+            System.out.println("Keyboard: run>");
             if(oldvalue)
             {
                 ArrayList<Note> note = service.getNotes();
@@ -51,11 +73,13 @@ public class Keyboard
                     pressed.clear();
                 }                
                 service.done();
+                System.out.println("Keyboard: run<");
             }
             
         };
         ChangeListener<Number> resize = (observable,oldvalue,newvalue) -> 
         {
+            System.out.println("Keyboard: resize>");
             root.setPrefHeight(height.get()/5.0);
             root.setPrefWidth(width.get());
             if(service.getState() == State.SCHEDULED)
@@ -70,14 +94,17 @@ public class Keyboard
                 }
             }
             this.update();
+            System.out.println("Keyboard: resize<");
         };
         ChangeListener<State> st = (observable,oldvalue,newvalue) -> 
         {
+            System.out.println("Keyboard: heightProperty");
             //System.out.println(service.getState());
         };
         ChangeListener<EventHandler<WorkerStateEvent>> s = (observable,oldvalue,newvalue) -> 
         {
-            System.out.println("s");
+            System.out.println("Keyboard: heightProperty");
+            //System.out.println("s");
         };
         
         service.runningProperty().addListener(run);
@@ -86,39 +113,24 @@ public class Keyboard
         height.addListener(resize);
         width.addListener(resize);
     }
-    
-    public DoubleProperty heightProperty()
-    {
-        return height;
-    }
-    public DoubleProperty widthProperty()
-    {
-        return width;
-    }
-    public double getHeight()
-    {
-        return height.get();
-    }
-    public double getWidth()
-    {
-        return width.get();
-    }
     public Pane getPane()
     {
+        System.out.println("Keyboard: getPane");
         return root;
     }
-    
     public void setHeight(double h)
     {
+        System.out.println("Keyboard: setHeight");
         height.set(h);
     }
     public void setWidth(double w)
     {
+        System.out.println("Keyboard: setWidth");
         width.set(w);
     }
-
     public void update()
     {
+        System.out.println("Keyboard: update>");
         double height = root.getPrefHeight();
         double width = root.getPrefWidth() / 52.0;
 
@@ -144,7 +156,6 @@ public class Keyboard
         }
 
         root.getChildren().add(bottom);
-    }
-    
-    
+        System.out.println("Keyboard: update<");
+    } 
 }

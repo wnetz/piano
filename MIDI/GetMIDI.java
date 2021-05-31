@@ -1,24 +1,19 @@
 package MIDI;
 
 import java.util.ArrayList;
-
-import javax.sound.midi.Track;
-
-import MIDI.Parsing.Note;
 import javafx.concurrent.Task;
+import javax.sound.midi.Track;
+import MIDI.Parsing.Note;
 
 public class GetMIDI extends Task<ArrayList<Note>>
 {
-    Track track;
     private ArrayList<Note> notes;
-    public GetMIDI(Track currentTrack)
-    {
-        track = currentTrack;
-        notes = new ArrayList<Note>();
-    }
+    private Track track;
+
     @Override
     protected ArrayList<Note> call()
     {
+        System.out.println("GetMIDI: call>");
         for (int j = 0; j < track.size() - 1; j += 0)// cycle through all unread notes 
         {
             byte[] n = track.get(j).getMessage().getMessage();
@@ -28,7 +23,13 @@ public class GetMIDI extends Task<ArrayList<Note>>
             // revove note so we dont read it more than once
             track.remove(track.get(j));
         }
-
+        System.out.println("GetMIDI: call<");
         return notes;
+    }
+    public GetMIDI(Track currentTrack)
+    {
+        System.out.println("GetMIDI");
+        track = currentTrack;
+        notes = new ArrayList<Note>();
     }
 }
