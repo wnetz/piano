@@ -1,9 +1,6 @@
 package MIDI;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-import javafx.concurrent.ScheduledService;
-import javafx.concurrent.Task;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
@@ -13,50 +10,50 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Track;
 import javax.sound.midi.Transmitter;
+
+import Graphics.PianoProject;
 import MIDI.Parsing.Note;
 
-public class MIDI extends ScheduledService<ArrayList<Note>> 
+public class MIDI implements Runnable
 {	
 	private ArrayList<Note> notes;
-	private boolean get;				//track state
 	private int device;					//-----------------------------cheat for now---------------------------------------
 	private MidiDevice inputDevice;
 	private Receiver receiver;
 	private Sequence seq;
 	private Sequencer sequencer;
-	private Task<ArrayList<Note>> t;
 	private Track currentTrack;
 	private Transmitter transmitter;
+	private boolean running = true;
+	private PianoProject pp;
 
 	public ArrayList<Note> getNotes() 
 	{
-		System.out.println("MIDI: getNotes");
-		get = true;//request to get notes	
+		notes = new ArrayList<Note>();
+		//System.out.println("MIDI: getNotes");
+		for (int j = 0; j < currentTrack.size() - 1; j += 0)// cycle through all unread notes 
+        {
+            byte[] n = currentTrack.get(j).getMessage().getMessage();
+            Note note = new Note((n[1] & 0xff),(n[2] & 0xff),(currentTrack.get(j).getTick()),(n[0] & 0xff));
+            notes.add(note);
+			pp.notePlayed((n[1] & 0xff),(n[0] & 0xff));
+            // revove note so we dont read it more than once
+            currentTrack.remove(currentTrack.get(j));
+
+        }
+		if(notes.size()!=0)
+		{
+			//System.out.println("notes: " + notes);
+		}	
 		return notes;		
 	}
-	public MIDI() 
+	public MIDI(PianoProject pp) 
 	{
 		System.out.println("MIDI");
-		get = false;
 		device = 5;
 		notes = new ArrayList<Note>();
-		
-
-		setOnSucceeded(s ->
-		{
-			t.cancel();
-		});
-		setOnReady(s -> 
-		{
-			//System.out.println(get);
-			if(get)
-			{
-				System.out.println("cancle");
-				t.cancel();
-				
-			}
-		});
-		
+		this.pp = pp;
+			
 
 		// all MIDI devices
 		/*for (int i = 0; i < MidiSystem.getMidiDeviceInfo().length; i++) {
@@ -101,7 +98,6 @@ public class MIDI extends ScheduledService<ArrayList<Note>>
 			System.out.println(e.getMessage());
 		}
 
-
 		// Do some sequencer settings
 		sequencer.setTempoInBPM(60);
 		sequencer.setTickPosition(0);
@@ -110,35 +106,15 @@ public class MIDI extends ScheduledService<ArrayList<Note>>
 		sequencer.startRecording();
 	}
 	@Override
-	protected Task<ArrayList<Note>> createTask()
-	{	
-		System.out.println("MIDI: createTask");	
-		//System.out.println("new");
-		t = new GetMIDI(currentTrack);
-		t.run();
-		try
+	public void run() {
+		// TODO Auto-generated method stub
+		while(running)
 		{
-			notes = (ArrayList<Note>)t.get();
-			if(notes.size()!=0)
-			{
-				//System.out.println(notes);
-			}
+			this.getNotes();
 		}
-		catch(InterruptedException e)
-		{
-			System.out.println(e.getMessage());
-		}
-		catch(ExecutionException e)
-		{
-			System.out.println(e.getMessage());
-		}
-		
-		return t;
 	}
-	public void done()
+    public void stop() 
 	{
-		System.out.println("MIDI: done");	
-		get = false;
-		notes.clear();
-	}
+		running = false;
+    }
 }

@@ -24,7 +24,6 @@ public class Dictionarys {
 		volumeStr = new Hashtable<Integer, String>();
 		volumeLoop = new Hashtable<Integer, Integer>();
 
-		int start = 21;
 
 		clef.put("t", 1);
 		clef.put("a", 2);
@@ -71,28 +70,32 @@ public class Dictionarys {
 		keyShort.put("nn#nn##", 11);// A
 		keyShort.put("nn##n##", 12);// E
 
-		for (int i = 1; i < 8; i++) {
-			notes.put("A" + i, start);
-			notes.put("A" + i + "s", start + 1);
-			notes.put("B" + i + "d", start + 1);
-			notes.put("B" + i, start + 2);
+		int start = 24;
+		notes.put("A0",21);
+		notes.put("A0s",22);
+		notes.put("B0",23);
+		for (int i = 1; i < 8; i++) {			
+			notes.put("C" + i, start);
+			notes.put("C" + i + "s", start + 1);
+			notes.put("D" + i + "d", start + 1);
+			notes.put("D" + i, start + 2);
+			notes.put("D" + i + "s", start + 3);
+			notes.put("E" + i + "d", start + 3);
+			notes.put("E" + i, start + 4);
+			notes.put("E" + i + "s", start + 5);
+			notes.put("F" + i + "d", start + 4);
+			notes.put("F" + i, start + 5);
+			notes.put("F" + i + "s", start + 6);
+			notes.put("G" + i + "d", start + 6);
+			notes.put("G" + i, start + 7);
+			notes.put("G" + i + "s", start + 8);
+			notes.put("A" + (i + 1) + "d", start + 8);
+			notes.put("A" + i, start + 9);
+			notes.put("A" + i + "s", start + 10);
+			notes.put("B" + i + "d", start + 10);
+			notes.put("B" + i, start + 11);
 			notes.put("B" + i + "s", start + 3);
 			notes.put("C" + i + "d", start + 2);
-			notes.put("C" + i, start + 3);
-			notes.put("C" + i + "s", start + 4);
-			notes.put("D" + i + "d", start + 4);
-			notes.put("D" + i, start + 5);
-			notes.put("D" + i + "s", start + 6);
-			notes.put("E" + i + "d", start + 6);
-			notes.put("E" + i, start + 7);
-			notes.put("E" + i + "s", start + 8);
-			notes.put("F" + i + "d", start + 7);
-			notes.put("F" + i, start + 8);
-			notes.put("F" + i + "s", start + 9);
-			notes.put("G" + i + "d", start + 9);
-			notes.put("G" + i, start + 10);
-			notes.put("G" + i + "s", start + 11);
-			notes.put("A" + (i + 1) + "d", start + 11);
 			start += 12;
 		}
 		notes.put("A8", 105);
