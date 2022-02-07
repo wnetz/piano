@@ -5,19 +5,29 @@ import java.awt.Graphics;
 
 import Graphics.Controll.ID;
 import Graphics.Controll.Objects;
+import MIDI.Parsing.Measure;
 
 public class SongNote extends Objects{
     private int midi, index, count;
-    private double length;
+    private int windoHeight = 100;
+    private double length, ratio, tempo, measures;
     private double speed = 10;
-    public SongNote(int x, double y, long length, ID id, Color color, int midi)
+    private boolean initialize = true;
+    public SongNote(double tempo, double measures, double length, ID id, Color color, int midi)
     {
-        super(x,y, id);
+        super(tempo,measures, id);
         this.length = length;
         this.color = color;
         this.midi = midi;
         this.index = midi - 21;
-        this.y = this.y*100;
+        this.measures = measures;
+        y = measures*10;
+        this.ratio = measures;
+        this.tempo = tempo;
+        if(midi == 60)
+        {
+                System.out.println(ratio);
+        }
 
         switch(midi%12)
         {
@@ -55,24 +65,40 @@ public class SongNote extends Objects{
     }
     @Override
     public void tick() {
-        y += speed; 
-        System.out.println(y);        
+        double pxlsPerMeasure = windoHeight/2.5;
+        y += pxlsPerMeasure*(tempo/60.0); 
+        ratio = y/windoHeight;
+        if(midi == 60)
+        {
+                System.out.println(length + " " + y + " " + ratio);
+        }
+               
     }
     @Override
-    public void render(Graphics g, int windowWidth, int windoHeight) {
-        int width = (int)(windowWidth*29/30.0);   
+    public void render(Graphics g, int windowWidth, int windoHeight) 
+    {     
+        if(initialize)
+        {
+                y = windoHeight*(measures/2.5)*-1;
+                initialize = false;
+                System.out.println(y + " " + midi);
+                ratio = y / windoHeight;
+        }   
+        int width = (int)(windowWidth*29/30.0);  
+        this.windoHeight = windoHeight;
+        y=windoHeight*ratio;
             
         g.setColor(color);
         if(id == ID.note)   
         {            
-            g.fillRect(width*index/52 + windowWidth/30, (int)y, width/52, windoHeight*3/20);
+            g.fillRect(width*index/52 + windowWidth/30, (int)(y-length*windoHeight/2.5), width/52, (int)(length*windoHeight/2.5));
         }
         else
         {
             g.fillRect(width*(index-count)/52 + width*3/208  + width/29, (int)y*-windoHeight, width/104, windoHeight*3/20);
         }
-        
-        
+                
+        ratio = y / windoHeight;
         
     }
     @Override

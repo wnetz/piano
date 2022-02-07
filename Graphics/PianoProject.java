@@ -40,15 +40,16 @@ public class PianoProject extends Canvas implements Runnable
     public PianoProject()
     {
         noteListeners = new ArrayList<>();
-
         parser = new Parser();
-        Song song = parser.parse("C:/Users/wnetz/Documents/piano/MIDI/Parsing/test.mscx");         
-                
+        Song song = parser.parse("C:/Users/wnetz/Documents/piano/MIDI/Parsing/test.mscx"); 
         m = new MIDI(this);
-        System.setProperty("sun.awt.noerasebackground", "true");
         handler = new Handler(); 
         songDisplay = new SongDisplay(song,handler);
-        menu = new Menu();       
+        menu = new Menu();          
+               
+        
+        System.setProperty("sun.awt.noerasebackground", "true");
+             
         this.addNotePlayedListener(new NotePlayedListener(handler));
         this.addMouseListener(menu);
         new MainPage(WIDTH, HEIGHT, "pp", this);

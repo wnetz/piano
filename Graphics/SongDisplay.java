@@ -21,6 +21,7 @@ public class SongDisplay {
         handler = h;
         int measures = 0;
         double ratio = 0.0;
+        double tempo = 0;
         ArrayList<Measure> top = song.getTop();
         for(int i = 0; i < top.size(); i++)
         {
@@ -28,7 +29,11 @@ public class SongDisplay {
             ArrayList<Voice> voices = measure.getVoices();
             for(int j = 0; j < voices.size(); j++)
             {
-                Voice voice = voices.get(j);
+                Voice voice = voices.get(j);  
+                if(voice.getTempo() != tempo && voice.getTempo() != 0)
+                {
+                    tempo = voice.getTempo();
+                }                           
                 ArrayList<Chord> chords = voice.getChords();
                 for(int k = 0; k < chords.size(); k++)
                 {
@@ -36,7 +41,7 @@ public class SongDisplay {
                     ArrayList<Note> notes = chord.getNotes();
                     for(int l=0; l < notes.size();l++)
                     {                        
-                        h.addObject(new SongNote(0, measures+ratio, notes.get(l).getTime(), ID.note, Color.RED, notes.get(l).getNote()));
+                        handler.addObject(new SongNote(tempo, measures+ratio, chord.getDuration(), ID.note, Color.RED, notes.get(l).getNote()));
                     }
                     //System.out.println(measures+ratio);
                     ratio += chord.getDuration();

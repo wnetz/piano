@@ -5,7 +5,8 @@ import java.awt.Color;
 
 public abstract class Objects 
 {
-    protected double x, y;
+    protected double x = 0;
+    protected double y = 0;
     protected ID id;
     protected int velx, vely;
     protected Color color;
