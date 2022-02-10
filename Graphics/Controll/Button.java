@@ -5,15 +5,15 @@ import java.awt.Graphics;
 
 public class Button 
 {
-    protected int x,y;
+    protected double x,y;
     protected double width,height;
     protected Color color;
     
-    public int getX()
+    public double getX()
     {
         return x;
     }
-    public int getY()
+    public double getY()
     {
         return y;
     }
@@ -29,18 +29,18 @@ public class Button
     {
         this.color = color;
     }
-    public void set(int x, int y, double width, double height)
+    public void set(double x, double y, double width, double height)
     {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
     }
-    public void setX(int x)
+    public void setX(double x)
     {
         this.x = x;
     }
-    public void setY(int y)
+    public void setY(double y)
     {
         this.y = y;
     }
@@ -55,6 +55,6 @@ public class Button
     public void render(Graphics g)
     {
         g.setColor(color);
-        g.fillRect(x, y, (int)width, (int)height);
+        g.fillRect((int)x, (int)y, (int)width, (int)height);
     }
 }

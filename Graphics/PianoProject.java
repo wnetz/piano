@@ -39,8 +39,7 @@ public class PianoProject extends Canvas implements Runnable
         midi = new MIDI(this);
         handler = new Handler(); 
         songDisplay = new SongDisplay(song,handler);
-        menu = new Menu();          
-               
+        menu = new Menu(); 
         
         System.setProperty("sun.awt.noerasebackground", "true");
              

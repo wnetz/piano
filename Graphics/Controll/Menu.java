@@ -84,21 +84,21 @@ public class Menu  extends MouseAdapter
         if(state == STATE.Closed)
         {
             width = windowWidth/30;
-            menu.set(2, (int)(windoHeight/60), width-4, (int)(windoHeight/60 + windoHeight/30.0) + (int)(windoHeight/120));
-            menu.set1(2, (int)(windoHeight/60), (int)(width-4), (int)(windoHeight/120));
-            menu.set2(2, (int)(windoHeight/60 + windoHeight/60.0), (int)(width-4), (int)(windoHeight/120));
-            menu.set3(2, (int)(windoHeight/60 + windoHeight/30.0), (int)(width-4), (int)(windoHeight/120));
+            menu.set(2, (windoHeight/60), width-4, (windoHeight/60 + windoHeight/30.0) + (windoHeight/120));
+            menu.set1(2, (windoHeight/60), (width-4), (windoHeight/120));
+            menu.set2(2, (windoHeight/60 + windoHeight/60.0), (width-4), (windoHeight/120));
+            menu.set3(2, (windoHeight/60 + windoHeight/30.0), (width-4), (windoHeight/120));
         }
         else if (state == STATE.Open)
         {
             width = windowWidth*5/30.0;
-            menu.set((int)(width-windowWidth/30)+2, (int)(windoHeight/60), (int)(windowWidth/30-4), (int)(windoHeight/60 + windoHeight/30.0) + (int)(windoHeight/120));
-            menu.set1((int)(width-windowWidth/30)+2, (int)(windoHeight/60), (int)(windowWidth/30-4), (int)(windoHeight/120));
-            menu.set2((int)(width-windowWidth/30)+2, (int)(windoHeight/60 + windoHeight/60.0), (int)(windowWidth/30-4), (int)(windoHeight/120));
-            menu.set3((int)(width-windowWidth/30)+2, (int)(windoHeight/60 + windoHeight/30.0), (int)(windowWidth/30-4), (int)(windoHeight/120));
+            menu.set((width-windowWidth/30)+2, (windoHeight/60), (windowWidth/30-4), (windoHeight/60 + windoHeight/30.0) + (windoHeight/120));
+            menu.set1((width-windowWidth/30)+2, (windoHeight/60), (windowWidth/30-4), (windoHeight/120));
+            menu.set2((width-windowWidth/30)+2, (windoHeight/60 + windoHeight/60.0), (windowWidth/30-4), (windoHeight/120));
+            menu.set3((width-windowWidth/30)+2, (windoHeight/60 + windoHeight/30.0), (windowWidth/30-4), (windoHeight/120));
         }
         height = windoHeight;        
-        q.set((int)(width/4), (int)(windoHeight/60)+500, width/2.0, windoHeight/30.0);
+        q.set((width/4), (windoHeight/60)+500, width/2.0, windoHeight/30.0);
         g.setColor(Color.blue);
         g.fillRect(0, 0, (int)width, windoHeight);
         menu.render(g,(windowWidth/30-4)/(windoHeight/120));
