@@ -2,9 +2,10 @@ package Graphics.Controll;
 
 public enum ID 
 {
+    key,
     measure,
     note,
-    sharpNote,
+    sharpKey,
     a0, 
     as0, 
     b0, 

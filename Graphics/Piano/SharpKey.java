@@ -3,31 +3,27 @@ package Graphics.Piano;
 import java.awt.Graphics;
 
 import Graphics.Controll.ID;
-import Graphics.Controll.Objects;
 
 import java.awt.Color;
 
-public class SharpKey extends Objects
+public class SharpKey extends Key
 {
-    int index;
-    int count;
-    int midi;
-    private Color color = Color.black;
+    private int count;
     private static Color defautColor = Color.black;
     public SharpKey(int x, int y, ID id) {
         super(x, y, id);
+        color = Color.black;
+        noteID=id;
+        id = ID.sharpKey;
     }
     public SharpKey(int x, int y, ID id, int index, int count) {
         super(x, y, id);
+        color = Color.black;
         this.index = index-1;  
         this.count = count; 
         midi = index;    
-    }
-
-    @Override
-    public void tick() {
-        // TODO Auto-generated method stub
-        
+        noteID=id;   
+        id = ID.sharpKey;
     }
 
     @Override
@@ -36,20 +32,6 @@ public class SharpKey extends Objects
         g.setColor(color);
         g.fillRect(width*(index-count)/52 + width*3/208  + width/29, windoHeight*4/5, width/104, windoHeight*3/20);
         
-    }
-
-    public int getMidi()
-    {
-        return midi;
-    }
-    public Color getColor()
-    {
-        return color;
-    }
-
-    public void setColor(Color color)
-    {
-        this.color = color;
     }
     
     public void setDefaultColor()

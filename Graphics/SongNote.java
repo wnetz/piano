@@ -10,13 +10,13 @@ import MIDI.Parsing.Measure;
 public class SongNote extends Objects{
     private int midi, index, count;
     private int windoHeight = 100;
-    private double length, ratio, tempo, measures;
+    private double noteLength, ratio, tempo, measures;
     private double speed = 10;
     private boolean initialize = true;
     public SongNote(double tempo, double measures, double length, ID id, Color color, int midi)
     {
         super(tempo,measures, id);
-        this.length = length;
+        this.noteLength = length;
         this.color = color;
         this.midi = midi;
         this.index = midi - 21;
@@ -26,7 +26,7 @@ public class SongNote extends Objects{
         this.tempo = tempo;
         if(midi == 60)
         {
-                System.out.println(ratio);
+                //System.out.println(ratio);
         }
 
         switch(midi%12)
@@ -70,7 +70,7 @@ public class SongNote extends Objects{
         ratio = y/windoHeight;
         if(midi == 60)
         {
-                System.out.println(length + " " + y + " " + ratio);
+                //System.out.println(length + " " + y + " " + ratio);
         }
                
     }
@@ -81,21 +81,24 @@ public class SongNote extends Objects{
         {
                 y = windoHeight*(measures/2.5)*-1;
                 initialize = false;
-                System.out.println(y + " " + midi);
+                //System.out.println(y + " " + midi);
                 ratio = y / windoHeight;
         }   
-        int width = (int)(windowWidth*29/30.0);  
+        width = (int)(windowWidth*29/30.0);  
+        length = noteLength*windoHeight/2.5;
         this.windoHeight = windoHeight;
         y=windoHeight*ratio;
             
         g.setColor(color);
         if(id == ID.note)   
-        {            
-            g.fillRect(width*index/52 + windowWidth/30, (int)(y-length*windoHeight/2.5), width/52, (int)(length*windoHeight/2.5));
+        {           
+                x = width*index/52 + windowWidth/30;
+                g.fillRect((int)x, (int)(y-length), (int)width/52, (int)(length));
         }
         else
         {
-            g.fillRect(width*(index-count)/52 + width*3/208  + width/29, (int)y*-windoHeight, width/104, windoHeight*3/20);
+                x = width*(index-count)/52 + width*3/208  + width/29;
+                g.fillRect((int)x, (int)(y-length), (int)width/104, (int)length);
         }
                 
         ratio = y / windoHeight;

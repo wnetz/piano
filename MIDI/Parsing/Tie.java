@@ -2,7 +2,7 @@ package MIDI.Parsing;
 
 public class Tie 
 {
-    private double  fraction;
+    private double fraction;
     private int measures;
 
     public double getFraction()

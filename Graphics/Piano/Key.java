@@ -9,32 +9,45 @@ import java.awt.Color;
 
 public class Key extends Objects
 {
-    private int index;
-    private int midi;
-    private Color color = Color.white;
-    private static Color defautColor = Color.white;
-    public Key(int x, int y, ID id) {
+    protected int index;
+    protected int midi;
+    protected ID noteID;
+    protected Color color = Color.white;
+    protected static Color defautColor = Color.white;
+    public Key(int x, int y, ID id) 
+    {
         super(x, y, id);
+        noteID=id;
+        id = ID.key;
     }
-    public Key(int x, int y, ID id,int midi, int index) {
+    public Key(int x, int y, ID id,int midi, int index) 
+    {
         super(x, y, id);
         this.index = index;    
-        this.midi = midi;    
+        this.midi = midi; 
+        noteID=id;   
+        id = ID.key;
     }
 
     @Override
-    public void tick() {
+    public void tick() 
+    {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void render(Graphics g, int windowWidth, int windoHeight) {
-        int width = (int)(windowWidth*29/30.0);
+    public void render(Graphics g, int windowWidth, int windoHeight) 
+    {
+        int w = (int)(windowWidth*29/30.0);
+        width = w/52;
+        length = windoHeight/5;
+        x = w*index/52 + windowWidth/30;
+        y = windoHeight*4/5;
         g.setColor(color);
-        g.fillRect(width*index/52 + windowWidth/30, windoHeight*4/5, width/52, windoHeight/5);
+        g.fillRect((int)x, (int)y, (int)width, (int)length);
         g.setColor(Color.black);
-        g.drawRect(width*index/52 + windowWidth/30, windoHeight*4/5, width/52, windoHeight/5);
+        g.drawRect((int)x, (int)y, (int)width, (int)length);
     }
 
     public int getMidi()
@@ -44,6 +57,10 @@ public class Key extends Objects
     public Color getColor()
     {
         return color;
+    }
+    public ID getNoteId()
+    {
+        return noteID;
     }
 
     public void setColor(Color color)

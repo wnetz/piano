@@ -1,4 +1,5 @@
 package Graphics;
+
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,10 +7,7 @@ import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
-
 import Graphics.Controll.Handler;
-import Graphics.Controll.ID;
 import Graphics.Controll.Menu;
 import Graphics.Controll.NotePlayedEvent;
 import Graphics.Controll.NotePlayedListener;
@@ -17,22 +15,18 @@ import Graphics.Piano.Key;
 import Graphics.Piano.Piano;
 import Graphics.Piano.SharpKey;
 import MIDI.MIDI;
-import MIDI.Parsing.Chord;
-import MIDI.Parsing.Measure;
-import MIDI.Parsing.Note;
 import MIDI.Parsing.Parser;
 import MIDI.Parsing.Song;
-import MIDI.Parsing.Voice;
 
 public class PianoProject extends Canvas implements Runnable
 {    
     public static final int WIDTH = 640, HEIGHT = WIDTH /12 * 9;
     public List<NotePlayedEvent> noteListeners;
-    private Thread mainTrhread;
+    private Thread mainThread;
     private Thread pianoThread;
     private boolean running = false;
     private Handler handler;
-    private MIDI m;
+    private MIDI midi;
     private Parser parser;
     private Menu menu;
     private SongDisplay songDisplay;
@@ -42,7 +36,7 @@ public class PianoProject extends Canvas implements Runnable
         noteListeners = new ArrayList<>();
         parser = new Parser();
         Song song = parser.parse("C:/Users/wnetz/Documents/piano/MIDI/Parsing/test.mscx"); 
-        m = new MIDI(this);
+        midi = new MIDI(this);
         handler = new Handler(); 
         songDisplay = new SongDisplay(song,handler);
         menu = new Menu();          
@@ -70,9 +64,10 @@ public class PianoProject extends Canvas implements Runnable
 
     public synchronized void start()
     {
-        mainTrhread = new Thread(this);
-        mainTrhread.start();
-        pianoThread = new Thread(m);
+        System.out.println("start");
+        mainThread = new Thread(this);
+        mainThread.start();
+        pianoThread = new Thread(midi);
         pianoThread.start();
         running = true;
     }
@@ -80,8 +75,8 @@ public class PianoProject extends Canvas implements Runnable
     {
         try
         {
-            mainTrhread.join();
-            m.stop();
+            mainThread.join();
+            midi.stop();
             pianoThread.join();
             running = false;
         }
@@ -89,14 +84,15 @@ public class PianoProject extends Canvas implements Runnable
         {
             e.printStackTrace();
         }
-        mainTrhread = new Thread();
-        mainTrhread.start();
+        mainThread = new Thread();
+        mainThread.start();
         pianoThread = new Thread();
         pianoThread.start();
     }
     @Override
     public void run() 
     {
+        System.out.println("run");
         long lastTime = System.nanoTime();
         double amountOfTicks = 60.0;
         double ns = 1000000000 /  amountOfTicks;
@@ -188,7 +184,7 @@ public class PianoProject extends Canvas implements Runnable
         Scanner s = new Scanner(System.in);
         for(int i =0; i < 5; i++)
         {
-            m.getNotes();
+            midi.getNotes();
             s.nextLine();
         }
         s.close();*/
