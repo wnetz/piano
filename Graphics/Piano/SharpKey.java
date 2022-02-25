@@ -11,13 +11,13 @@ public class SharpKey extends Key
     private int count;
     private static Color defautColor = Color.black;
     public SharpKey(int x, int y, ID id) {
-        super(x, y, id);
+        super(x, y, ID.sharpKey);
         color = Color.black;
         noteID=id;
         id = ID.sharpKey;
     }
     public SharpKey(int x, int y, ID id, int index, int count) {
-        super(x, y, id);
+        super(x, y, ID.sharpKey);
         color = Color.black;
         this.index = index-1;  
         this.count = count; 

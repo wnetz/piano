@@ -11,18 +11,20 @@ public class Key extends Objects
 {
     protected int index;
     protected int midi;
+    protected int length;
+    protected int width;
     protected ID noteID;
     protected Color color = Color.white;
     protected static Color defautColor = Color.white;
     public Key(int x, int y, ID id) 
     {
-        super(x, y, id);
+        super(x, y, ID.key);
         noteID=id;
         id = ID.key;
     }
     public Key(int x, int y, ID id,int midi, int index) 
     {
-        super(x, y, id);
+        super(x, y, ID.key);
         this.index = index;    
         this.midi = midi; 
         noteID=id;   

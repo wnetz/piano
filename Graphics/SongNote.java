@@ -13,6 +13,8 @@ public class SongNote extends Objects{
     private double noteLength, ratio, tempo, measures;
     private double speed = 10;
     private boolean initialize = true;
+    private boolean playing = false;
+    static boolean pause = false;
     public SongNote(double tempo, double measures, double length, ID id, Color color, int midi)
     {
         super(tempo,measures, id);
@@ -66,8 +68,11 @@ public class SongNote extends Objects{
     @Override
     public void tick() {
         double pxlsPerMeasure = windoHeight/2.5;
-        y += pxlsPerMeasure*(tempo/60.0); 
-        ratio = y/windoHeight;
+        if(!pause)
+        {
+                y += pxlsPerMeasure*(tempo/60.0); 
+                ratio = y/windoHeight;
+        }
         if(midi == 60)
         {
                 //System.out.println(length + " " + y + " " + ratio);
@@ -116,5 +121,25 @@ public class SongNote extends Objects{
     @Override
     public void setDefaultColor() {
         
+    }
+    public int getMidi()
+    {
+            return midi - 21;
+    }
+    public void setPlaying(boolean p)
+    {
+        playing = p;
+    }
+    public boolean getPlaying()
+    {
+        return playing;
+    }
+    public static void pause()
+    {
+        pause = true;
+    }
+    public static void play()
+    {
+        pause = false;
     }
 }

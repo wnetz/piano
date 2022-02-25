@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import javax.lang.model.util.ElementScanner6;
 
+import Graphics.SongNote;
 import Graphics.Piano.Key;
 
 public class NotePlayedListener implements NotePlayedEvent
@@ -22,6 +23,14 @@ public class NotePlayedListener implements NotePlayedEvent
         {
             
             Objects tempObject = handler.objects.get(i);
+            if(tempObject instanceof SongNote)
+            {
+                if(note == ((SongNote)tempObject).getMidi()+21 && ((SongNote)tempObject).getPlaying())
+                {
+                    System.out.println(((SongNote)tempObject).getMidi()+21);
+                    SongNote.play();
+                }
+            }
             if(tempObject instanceof Key)
             {
                 Key tempKey = (Key)tempObject;

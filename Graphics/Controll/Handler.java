@@ -1,6 +1,11 @@
 package Graphics.Controll;
 
 import java.util.LinkedList;
+
+import Graphics.SongNote;
+import Graphics.Piano.Key;
+
+import java.awt.Color;
 import java.awt.Graphics;
 
 public class Handler 
@@ -13,25 +18,35 @@ public class Handler
         {
             objects.get(i).tick();
         }
-        /*for(int i = 0; i < objects.size()-1; i++)
+        for(int i = 0; i < objects.size()-1; i++)
         {
             if(objects.get(i).id == ID.note)
             {
-                Objects obj1 = objects.get(i);
-                for(int j = i+1; j < objects.size(); j++)
+                SongNote obj1 = (SongNote)objects.get(i);
+                for(int j = 0; j < objects.size(); j++)
                 {
                     if(objects.get(j).id == ID.key || objects.get(j).id == ID.sharpKey)
                     {
-                        Objects obj2 = objects.get(j);
-                        if(obj1.x == obj2.x)
+                        Key obj2 = (Key)objects.get(j);
+                        if(obj1.getMidi() == obj2.getMidi())
                         {
-                            System.out.println(obj1.x);
+                            if(obj1.y > obj2.y && obj1.y - obj1.length < obj2.y && !obj1.getPlaying())
+                            {
+                                obj2.setColor(Color.GREEN);
+                                j = objects.size();
+                                obj1.setPlaying(true);
+                                obj1.pause();
+                            }
+                            else if(obj1.y - obj1.length > obj2.y && obj1.getPlaying())
+                            {
+                                obj2.setDefaultColor(); 
+                                obj1.setPlaying(false);
+                            }
                         }
-                    }
-
+                    } 
                 }
             }
-        }*/
+        }
     }
     public void render(Graphics g, int windowWidth, int windoHeight)
     {
