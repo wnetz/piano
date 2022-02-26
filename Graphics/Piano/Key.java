@@ -26,7 +26,7 @@ public class Key extends Objects
     {
         super(x, y, ID.key);
         this.index = index;    
-        this.midi = midi; 
+        this.midi = midi + 21; 
         noteID=id;   
         id = ID.key;
     }

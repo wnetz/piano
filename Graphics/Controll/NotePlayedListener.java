@@ -19,18 +19,18 @@ public class NotePlayedListener implements NotePlayedEvent
     public void notePressed(int note) 
     {        
         System.out.println("on: " + note);
+        handler.press(note);
         for(int i = 0; i < handler.objects.size(); i++)
-        {
-            
+        {            
             Objects tempObject = handler.objects.get(i);
-            if(tempObject instanceof SongNote)
+            /*if(tempObject instanceof SongNote)
             {
-                if(note == ((SongNote)tempObject).getMidi()+21 && ((SongNote)tempObject).getPlaying())
+                if(note == ((SongNote)tempObject).getMidi() && ((SongNote)tempObject).getPlaying())
                 {
-                    System.out.println(((SongNote)tempObject).getMidi()+21);
+                    System.out.println(((SongNote)tempObject).getMidi());
                     SongNote.play();
                 }
-            }
+            }*/
             if(tempObject instanceof Key)
             {
                 Key tempKey = (Key)tempObject;
@@ -128,6 +128,7 @@ public class NotePlayedListener implements NotePlayedEvent
     public void noteReleased(int note) 
     {        
         System.out.println("off: " + note);
+        handler.unpress(note);
         for(int i = 0; i < handler.objects.size(); i++)
         {
             Objects tempObject = handler.objects.get(i);

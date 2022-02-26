@@ -124,7 +124,7 @@ public class SongNote extends Objects{
     }
     public int getMidi()
     {
-            return midi - 21;
+            return midi;
     }
     public void setPlaying(boolean p)
     {
