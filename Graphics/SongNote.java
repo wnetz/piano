@@ -7,7 +7,8 @@ import Graphics.Controll.ID;
 import Graphics.Controll.Objects;
 import MIDI.Parsing.Measure;
 
-public class SongNote extends Objects{
+public class SongNote extends Objects
+{
     private int midi, index, count;
     private int windoHeight = 100;
     private double noteLength, ratio, tempo, measures;
@@ -66,7 +67,8 @@ public class SongNote extends Objects{
         }
     }
     @Override
-    public void tick() {
+    public void tick() 
+    {
         double pxlsPerMeasure = windoHeight/2.5;
         if(!pause)
         {
@@ -102,24 +104,27 @@ public class SongNote extends Objects{
         }
         else
         {
-                x = width*(index-count)/52 + width*3/208  + width/29;
+                x = width*index/52 + width*3/208  + width/29;
                 g.fillRect((int)x, (int)(y-length), (int)width/104, (int)length);
+                System.out.println("index: " + index + " midi: " + midi + " count: " + count);
         }
                 
         ratio = y / windoHeight;
         
     }
     @Override
-    public void setColor(Color color) {
-        this.color = color;
-        
+    public void setColor(Color color) 
+    {
+        this.color = color;        
     }
     @Override
-    public Color getColor() {
+    public Color getColor() 
+    {
         return color;
     }
     @Override
-    public void setDefaultColor() {
+    public void setDefaultColor() 
+    {
         
     }
     public int getMidi()

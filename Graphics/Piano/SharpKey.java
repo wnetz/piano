@@ -21,7 +21,7 @@ public class SharpKey extends Key
         color = Color.black;
         this.index = index-1;  
         this.count = count; 
-        midi = index;    
+        midi = index+21;    
         noteID=id;   
         id = ID.sharpKey;
     }

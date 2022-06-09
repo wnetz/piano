@@ -35,7 +35,7 @@ public class PianoProject extends Canvas implements Runnable
     {
         noteListeners = new ArrayList<>();
         parser = new Parser();
-        Song song = parser.parse("C:/Users/wnetz/Documents/piano/MIDI/Parsing/test.mscx"); 
+        Song song = parser.parse("C:/Users/wnetz/Documents/piano/MIDI/Parsing/Watashi_no_Uso.mscx"); 
         midi = new MIDI(this);
         handler = new Handler(); 
         songDisplay = new SongDisplay(song,handler);

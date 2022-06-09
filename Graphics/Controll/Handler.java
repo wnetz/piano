@@ -1,8 +1,8 @@
 package Graphics.Controll;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
+import Graphics.MeasureBar;
 import Graphics.SongNote;
 import Graphics.Piano.Key;
 
@@ -11,9 +11,9 @@ import java.awt.Graphics;
 /**handles updating and drawing of all objects*/
 public class Handler 
 {
-    public LinkedList<Objects> objects = new LinkedList<Objects>();
-    private LinkedList<Integer> pressed = new LinkedList<Integer>();
-    private LinkedList<Integer> toBePressed = new LinkedList<Integer>();
+    public ArrayList<Objects> objects = new ArrayList<Objects>();
+    private ArrayList<Integer> pressed = new ArrayList<Integer>();
+    private ArrayList<Integer> toBePressed = new ArrayList<Integer>();
     /**updates all objects */
     public void tick()
     {
@@ -23,35 +23,35 @@ public class Handler
         }
         for(int i = 0; i < objects.size()-1; i++)
         {
-            if(objects.get(i).id == ID.note)// if object is a note check for collision
+            if(objects.get(i).id == ID.note || objects.get(i).id == ID.sharpNote)// if object is a note check for collision
             {
-                SongNote obj1 = (SongNote)objects.get(i);//type cast to note
-                //if(!pressed.contains(obj1.getMidi()))// if note is already pressed dont bother checking
+                SongNote note = (SongNote)objects.get(i);//type cast to note
+                //if(!pressed.contains(note.getMidi()))// if note is already pressed dont bother checking
                 //{
                     for(int j = 0; j < objects.size(); j++)
                     {
                         if(objects.get(j).id == ID.key || objects.get(j).id == ID.sharpKey)// if object is piano key
                         {
-                            Key obj2 = (Key)objects.get(j);
-                            if(obj1.getMidi() == obj2.getMidi())// if key is the same note
+                            Key key = (Key)objects.get(j);
+                            if(note.getMidi() == key.getMidi())// if key is the same note
                             {
-                                if(obj1.y > obj2.y && obj1.y - obj1.length < obj2.y && !obj1.getPlaying())//if note is in key and not already playing
+                                if(note.y > key.y && note.y - note.length < key.y && !note.getPlaying())//if note is in key and not already playing
                                 {
-                                    obj2.setColor(Color.GREEN);
+                                    key.setColor(Color.GREEN);
                                     j = objects.size();
-                                    obj1.setPlaying(true);
-                                    toBePressed.add(obj1.getMidi()); 
-                                    System.out.println(pressed + " " + obj1.getMidi());
-                                    if(pressed.contains(obj1.getMidi())) 
+                                    note.setPlaying(true);
+                                    toBePressed.add(note.getMidi()); 
+                                    System.out.println(pressed + " " + note.getMidi());
+                                    if(pressed.contains(note.getMidi())) 
                                     {
-                                        pressed.remove(pressed.indexOf(obj1.getMidi()));
+                                        pressed.remove(pressed.indexOf(note.getMidi()));
                                     }
-                                    System.out.println(pressed + " " + obj1.getMidi());                                  
+                                    System.out.println(pressed + " " + note.getMidi());                                  
                                 }
-                                else if(obj1.y - obj1.length > obj2.y && obj1.getPlaying())// if note below keyboard
+                                else if(note.y - note.length > key.y && note.getPlaying())// if note below keyboard
                                 {
-                                    obj2.setDefaultColor(); 
-                                    obj1.setPlaying(false);
+                                    key.setDefaultColor(); 
+                                    note.setPlaying(false);
                                 }
                             }
                         } 
@@ -70,18 +70,21 @@ public class Handler
         if(!allpressed)//inf notes are not all pressed pause
         {            
             SongNote.pause();
+            MeasureBar.pause();
         } 
         else// if all notes are pressed clear and play
         {
             toBePressed.clear();
             SongNote.play();
+            MeasureBar.play();
         }
     }
     public void render(Graphics g, int windowWidth, int windoHeight)
     {
         for(int i = 0; i < objects.size(); i++)
         {
-            objects.get(i).render(g, windowWidth, windoHeight);
+            if(objects.get(i).y+objects.get(i).length > 0 && objects.get(i).y < windoHeight*2)
+                objects.get(i).render(g, windowWidth, windoHeight);
         }
     }
     public void addObject(Objects o)
