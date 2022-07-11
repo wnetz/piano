@@ -77,7 +77,7 @@ public class SongDisplay {
                                     {
                                         throw new IndexOutOfBoundsException("sdfbhdfb");
                                     }
-                                    System.out.println("size " +next);
+                                    //System.out.println("size " +next);
                                     duration += next;                                   
                                 }
                             }
@@ -89,7 +89,7 @@ public class SongDisplay {
                         }                
                         handler.addObject(new SongNote(tempo, measures+ratio, duration, id, Color.RED, notes.get(l).getNote()));
                     }
-                    //System.out.println(measures+ratio);
+                    ////System.out.println(measures+ratio);
                     ratio += duration;
                 }
             }            
@@ -102,7 +102,7 @@ public class SongDisplay {
     {
         duration = duration * timeD;
         double multiplier = 1+ ((Math.pow(2, dots))-1)/(Math.pow(2, dots));
-        System.out.println( (timeN/(duration * multiplier)) + ", " + duration + ", " + (duration * multiplier) + ", " + multiplier + ", " + ((Math.pow(2, dots))-1 + "/" +Math.pow(2, dots)));
+        //System.out.println( (timeN/(duration * multiplier)) + ", " + duration + ", " + (duration * multiplier) + ", " + multiplier + ", " + ((Math.pow(2, dots))-1 + "/" +Math.pow(2, dots)));
         return (duration * multiplier)/timeN;
     }
     private double tieDuration(ArrayList<Measure> half, int measure, int measures, double fraction, int note)
@@ -133,7 +133,7 @@ public class SongDisplay {
                     int dot = c.getDot();
                     duration = noteLength(c.getDuration(),dot);
                     ArrayList<Note> notes = c.getNotes();                    
-                    System.out.println("size " + notes.size() + " depth " + depth + " from " + measure + " measure " + i );
+                    //System.out.println("size " + notes.size() + " depth " + depth + " from " + measure + " measure " + i );
                     for(int l = 0; l < notes.size();l++)
                     {  
                         if(note == notes.get(l).getNote())
@@ -141,7 +141,7 @@ public class SongDisplay {
                             ArrayList<Tie> ties = notes.get(l).getTies();
                             if(ties.size() == 2)
                             {                            
-                                System.out.println("two " + notes.get(l).getNote());
+                                //System.out.println("two " + notes.get(l).getNote());
                                 if(ties.get(1).getMeasures() == measures*-1 && ties.get(1).getFraction() == fraction*-1)
                                 {
                                     deleteNote = l;
@@ -154,7 +154,7 @@ public class SongDisplay {
                             }
                             if(ties.size() == 1)
                             {
-                                System.out.println("one " + notes.get(l).getNote());
+                                //System.out.println("one " + notes.get(l).getNote());
                                 if(ties.get(0).getMeasures() == measures*-1 && ties.get(0).getFraction() == fraction*-1)
                                 {
                                     deleteNote = l;
@@ -174,11 +174,11 @@ public class SongDisplay {
                     if(deleteNote >= 0) 
                     {
                         notes.remove(deleteNote);
-                        System.out.println("size " + notes.size() + " depth " + depth + " from " + measure);
+                        //System.out.println("size " + notes.size() + " depth " + depth + " from " + measure);
                         depth--; 
                         return duration;
                     }
-                    System.out.println("size " + notes.size() + " depth " + depth);
+                    //System.out.println("size " + notes.size() + " depth " + depth);
                 }
             }         
         }

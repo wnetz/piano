@@ -1,8 +1,10 @@
-package Graphics.Controll;
+package Graphics;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import Graphics.Controll.Button;
+import Graphics.Controll.Hamberger;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -52,14 +54,14 @@ public class Menu  extends MouseAdapter
     }
     public void tick(int windowWidth, int windoHeight)
     {
-        double diff = (windowWidth*5/30.0 - windowWidth/30)/15.0;
+        double diff = (windowWidth*5 - windowWidth)/15.0;
         if(state == STATE.Opening)
         {
             menu.moveX(diff);
             width =  width + diff;
-            if(width >= windowWidth*5/30.0)
+            if(width >= windowWidth*5)
             {
-                width = windowWidth*5/30.0;
+                width = windowWidth*5;
                 state = STATE.Open;
                 System.out.println(state);
             }
@@ -69,9 +71,9 @@ public class Menu  extends MouseAdapter
         {
             menu.moveX(-diff);
             width =  width - diff;
-            if(width <= windowWidth/30)
+            if(width <= windowWidth)
             {
-                width = windowWidth/30;
+                width = windowWidth;
                 state = STATE.Closed;
                 System.out.println(state);
             }
@@ -83,7 +85,7 @@ public class Menu  extends MouseAdapter
     {
         if(state == STATE.Closed)
         {
-            width = windowWidth/30;
+            width = windowWidth;
             menu.set(2, (windoHeight/60), width-4, (windoHeight/60 + windoHeight/30.0) + (windoHeight/120));
             menu.set1(2, (windoHeight/60), (width-4), (windoHeight/120));
             menu.set2(2, (windoHeight/60 + windoHeight/60.0), (width-4), (windoHeight/120));
@@ -91,17 +93,17 @@ public class Menu  extends MouseAdapter
         }
         else if (state == STATE.Open)
         {
-            width = windowWidth*5/30.0;
-            menu.set((width-windowWidth/30)+2, (windoHeight/60), (windowWidth/30-4), (windoHeight/60 + windoHeight/30.0) + (windoHeight/120));
-            menu.set1((width-windowWidth/30)+2, (windoHeight/60), (windowWidth/30-4), (windoHeight/120));
-            menu.set2((width-windowWidth/30)+2, (windoHeight/60 + windoHeight/60.0), (windowWidth/30-4), (windoHeight/120));
-            menu.set3((width-windowWidth/30)+2, (windoHeight/60 + windoHeight/30.0), (windowWidth/30-4), (windoHeight/120));
+            width = windowWidth*5;
+            menu.set((width-windowWidth)+2, (windoHeight/60), (windowWidth-4), (windoHeight/60 + windoHeight/30.0) + (windoHeight/120));
+            menu.set1((width-windowWidth)+2, (windoHeight/60), (windowWidth-4), (windoHeight/120));
+            menu.set2((width-windowWidth)+2, (windoHeight/60 + windoHeight/60.0), (windowWidth-4), (windoHeight/120));
+            menu.set3((width-windowWidth)+2, (windoHeight/60 + windoHeight/30.0), (windowWidth-4), (windoHeight/120));
         }
         height = windoHeight;        
-        q.set((width/4), (windoHeight/60)+500, width/2.0, windoHeight/30.0);
+        q.set((width/4), (windoHeight/60)+500, width/2.0, windoHeight);
         g.setColor(Color.blue);
         g.fillRect(0, 0, (int)width, windoHeight);
-        menu.render(g,(windowWidth/30-4)/(windoHeight/120));
+        menu.render(g,(windowWidth-4)/(windoHeight/120));
         q.render(g);
     }
 }

@@ -21,7 +21,7 @@ public abstract class Objects
     }
 
     public abstract void tick();
-    public abstract void render(Graphics g, int windowWidth, int windoHeight);
+    public abstract void render(Graphics g, int windowWidth, int windoHeight, double windowRatio);
     public abstract void setColor(Color color);
     public abstract Color getColor();
     public abstract void setDefaultColor();

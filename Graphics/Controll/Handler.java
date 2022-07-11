@@ -79,12 +79,12 @@ public class Handler
             MeasureBar.play();
         }
     }
-    public void render(Graphics g, int windowWidth, int windoHeight)
+    public void render(Graphics g, int windowWidth, int windoHeight, double windowRatio)
     {
         for(int i = 0; i < objects.size(); i++)
         {
             if(objects.get(i).y+objects.get(i).length > 0 && objects.get(i).y < windoHeight*2)
-                objects.get(i).render(g, windowWidth, windoHeight);
+                objects.get(i).render(g, windowWidth, windoHeight, windowRatio);
         }
     }
     public void addObject(Objects o)

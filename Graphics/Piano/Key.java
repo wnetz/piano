@@ -39,9 +39,9 @@ public class Key extends Objects
     }
 
     @Override
-    public void render(Graphics g, int windowWidth, int windoHeight) 
+    public void render(Graphics g, int windowWidth, int windoHeight, double windowRatio) 
     {
-        int w = (int)(windowWidth*29/30.0);
+        int w = (int)(windowWidth*windowRatio);
         width = w/52;
         length = windoHeight/5;
         x = w*index/52 + windowWidth/30;

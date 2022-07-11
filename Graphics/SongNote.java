@@ -29,7 +29,7 @@ public class SongNote extends Objects
         this.tempo = tempo;
         if(midi == 60)
         {
-                //System.out.println(ratio);
+                ////System.out.println(ratio);
         }
 
         switch(midi%12)
@@ -77,21 +77,21 @@ public class SongNote extends Objects
         }
         if(midi == 60)
         {
-                //System.out.println(length + " " + y + " " + ratio);
+                ////System.out.println(length + " " + y + " " + ratio);
         }
                
     }
     @Override
-    public void render(Graphics g, int windowWidth, int windoHeight) 
+    public void render(Graphics g, int windowWidth, int windoHeight, double windowRatio) 
     {     
         if(initialize)
         {
                 y = windoHeight*(measures/2.5)*-1;
                 initialize = false;
-                //System.out.println(y + " " + midi);
+                ////System.out.println(y + " " + midi);
                 ratio = y / windoHeight;
         }   
-        width = (int)(windowWidth*29/30.0);  
+        width = (int)(windowWidth*windowRatio); 
         length = noteLength*windoHeight/2.5;
         this.windoHeight = windoHeight;
         y=windoHeight*ratio;
@@ -106,7 +106,7 @@ public class SongNote extends Objects
         {
                 x = width*index/52 + width*3/208  + width/29;
                 g.fillRect((int)x, (int)(y-length), (int)width/104, (int)length);
-                System.out.println("index: " + index + " midi: " + midi + " count: " + count);
+                //System.out.println("index: " + index + " midi: " + midi + " count: " + count);
         }
                 
         ratio = y / windoHeight;

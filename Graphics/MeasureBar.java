@@ -33,7 +33,7 @@ public class MeasureBar extends Objects
         }
     }
     @Override
-    public void render(Graphics g, int windowWidth, int windoHeight) 
+    public void render(Graphics g, int windowWidth, int windoHeight, double windowRatio) 
     {
         if(initialize)
         {
@@ -42,14 +42,14 @@ public class MeasureBar extends Objects
             //System.out.println(y + " " + midi);
             ratio = y / windoHeight;
         }   
-        width = windowWidth;  
+        width = windowWidth*windowRatio; //should probably be deleted 
         length = 2;
         this.windoHeight = windoHeight;
         y=windoHeight*ratio;
             
         g.setColor(color);
         x = -5;
-        g.drawLine(-5, (int)y, (int)width + 5, (int)y);
+        g.drawLine(-5, (int)y, (int)windowWidth + 5, (int)y);
                 
         ratio = y / windoHeight;        
     }

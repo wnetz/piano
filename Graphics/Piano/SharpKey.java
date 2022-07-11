@@ -27,8 +27,8 @@ public class SharpKey extends Key
     }
 
     @Override
-    public void render(Graphics g, int windowWidth, int windoHeight) {
-        int width = (int)(windowWidth*29/30.0);
+    public void render(Graphics g, int windowWidth, int windoHeight, double windowRatio) {
+        int width = (int)(windowWidth*windowRatio);
         g.setColor(color);
         g.fillRect(width*(index-count)/52 + width*3/208  + width/29, windoHeight*4/5, width/104, windoHeight*3/20);
         

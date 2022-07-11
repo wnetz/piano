@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import Graphics.Controll.Handler;
-import Graphics.Controll.Menu;
 import Graphics.Controll.NotePlayedEvent;
 import Graphics.Controll.NotePlayedListener;
 import Graphics.Piano.Key;
@@ -21,6 +20,7 @@ import MIDI.Parsing.Song;
 public class PianoProject extends Canvas implements Runnable
 {    
     public static final int WIDTH = 640, HEIGHT = WIDTH /12 * 9;
+    public final double MENUWIDTH = 1/30.0;
     public List<NotePlayedEvent> noteListeners;
     private Thread mainThread;
     private Thread pianoThread;
@@ -126,7 +126,7 @@ public class PianoProject extends Canvas implements Runnable
     private void tick()
     {
         handler.tick();
-        menu.tick(this.getWidth(), this.getHeight());
+        menu.tick((int)(this.getWidth()*MENUWIDTH), this.getHeight());
         
     }
     private void render()
@@ -144,8 +144,8 @@ public class PianoProject extends Canvas implements Runnable
         g.setColor(Color.gray);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         
-        handler.render(g,this.getWidth(), this.getHeight());
-        menu.render(g, this.getWidth(), this.getHeight());
+        handler.render(g,this.getWidth(), this.getHeight(),(1-MENUWIDTH));
+        menu.render(g, (int)(this.getWidth()*MENUWIDTH), this.getHeight());
 
         //System.out.println(this.getSize());
         g.dispose();
