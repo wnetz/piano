@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import javax.lang.model.util.ElementScanner6;
 
-import Graphics.SongNote;
 import Graphics.Piano.Key;
 
 public class NotePlayedListener implements NotePlayedEvent

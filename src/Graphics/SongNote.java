@@ -5,7 +5,6 @@ import java.awt.Graphics;
 
 import Graphics.Controll.ID;
 import Graphics.Controll.Objects;
-import MIDI.Parsing.Measure;
 
 public class SongNote extends Objects
 {

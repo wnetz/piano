@@ -1,10 +1,7 @@
-package Graphics;
+package Graphics.Controll;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import Graphics.Controll.Button;
-import Graphics.Controll.Hamberger;
 
 import java.awt.Color;
 import java.awt.Graphics;

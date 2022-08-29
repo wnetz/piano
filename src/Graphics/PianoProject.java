@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import Graphics.Controll.Handler;
+import Graphics.Controll.Menu;
 import Graphics.Controll.NotePlayedEvent;
 import Graphics.Controll.NotePlayedListener;
 import Graphics.Piano.Key;
@@ -16,6 +17,8 @@ import Graphics.Piano.SharpKey;
 import MIDI.MIDI;
 import MIDI.Parsing.Parser;
 import MIDI.Parsing.Song;
+
+import javax.swing.*;
 
 public class PianoProject extends Canvas implements Runnable
 {    
@@ -35,7 +38,7 @@ public class PianoProject extends Canvas implements Runnable
     {
         noteListeners = new ArrayList<>();
         parser = new Parser();
-        Song song = parser.parse("C:/Users/wnetz/Documents/piano/MIDI/Parsing/Watashi_no_Uso.mscx"); 
+        Song song = parser.parse("src/MIDI/Parsing/Watashi_no_Uso.mscx");
         midi = new MIDI(this);
         handler = new Handler(); 
         songDisplay = new SongDisplay(song,handler);
