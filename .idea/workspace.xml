@@ -1,43 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f5b9959e-7f9b-4312-be0f-43c4fbf2b64a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Graphics/Controll/Slider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/tasks.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Controll/Button.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Controll/Button.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Controll/Hamberger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Controll/Hamberger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Controll/Handler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Controll/Handler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Controll/ID.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Controll/ID.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Controll/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Controll/Menu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Controll/NotePlayedEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Controll/NotePlayedEvent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Controll/NotePlayedListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Controll/NotePlayedListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Controll/Objects.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Controll/Objects.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Controll/TimeSlider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Controll/TimeSlider.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/MainPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/MainPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/MeasureBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/MeasureBar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Piano/Key.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Piano/Key.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Piano/Piano.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Piano/Piano.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/Piano/SharpKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/Piano/SharpKey.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/PianoProject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/PianoProject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/SongDisplay.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/SongDisplay.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Graphics/SongNote.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Graphics/SongNote.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MIDI/Dictionarys.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MIDI/Dictionarys.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MIDI/MIDI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MIDI/MIDI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MIDI/Parsing/Chord.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MIDI/Parsing/Chord.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MIDI/Parsing/Measure.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MIDI/Parsing/Measure.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MIDI/Parsing/Note.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MIDI/Parsing/Note.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MIDI/Parsing/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MIDI/Parsing/Parser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MIDI/Parsing/Song.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MIDI/Parsing/Song.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MIDI/Parsing/Tie.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MIDI/Parsing/Tie.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MIDI/Parsing/Voice.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MIDI/Parsing/Voice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MIDI/Parsing/Watashi_no_Uso.mscx" beforeDir="false" afterPath="$PROJECT_DIR$/src/MIDI/Parsing/Watashi_no_Uso.mscx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MIDI/Parsing/test.mscx" beforeDir="false" afterPath="$PROJECT_DIR$/src/MIDI/Parsing/test.mscx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/piano.iml" beforeDir="false" afterPath="$PROJECT_DIR$/piano.iml" afterDir="false" />
-    </list>
+    <list default="true" id="f5b9959e-7f9b-4312-be0f-43c4fbf2b64a" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
